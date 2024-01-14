@@ -1,4 +1,5 @@
-use crate::models::user::{NewUser, User, UserLogin};
+use super::DataResult;
+use crate::models::user::{User, UserForm, UserLogin};
 use crate::schema::users::dsl::*;
 
 use diesel::prelude::*;
@@ -6,10 +7,12 @@ use diesel::PgConnection;
 use password_auth::verify_password;
 use serde_json::Value;
 
-type DataResult<T> = Result<T, diesel::result::Error>;
-
 pub fn get_all_users(conn: &mut PgConnection) -> DataResult<Vec<User>> {
     Ok(users.select(User::as_select()).load(conn)?)
+}
+
+pub fn get_user_by_id(conn: &mut PgConnection, user_id: i32) -> DataResult<User> {
+    Ok(users.find(user_id).first(conn)?)
 }
 
 pub fn login(conn: &mut PgConnection, login: UserLogin) -> DataResult<User> {
@@ -30,7 +33,7 @@ pub fn login(conn: &mut PgConnection, login: UserLogin) -> DataResult<User> {
     Ok(user)
 }
 
-pub fn create_new_user(conn: &mut PgConnection, user_data: NewUser) -> DataResult<User> {
+pub fn create_new_user(conn: &mut PgConnection, user_data: UserForm) -> DataResult<User> {
     Ok(diesel::insert_into(users)
         .values(user_data)
         .returning(User::as_returning())

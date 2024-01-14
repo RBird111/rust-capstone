@@ -13,4 +13,4 @@
 
     [dependencies.diesel]
         version  = "2.1.4"
-        features = ["postgres", "extras", "r2d2"]
+        features = ["postgres", "extras", "r2d2", "numeric"]

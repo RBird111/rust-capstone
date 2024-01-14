@@ -14,12 +14,13 @@ pub struct User {
     pub last_name: String,
     pub username: String,
     pub email: String,
+    #[serde(skip_serializing)]
     pub hashed_password: String,
 }
 
-#[derive(Insertable)]
+#[derive(Insertable, AsChangeset)]
 #[diesel(table_name = users)]
-pub struct NewUser {
+pub struct UserForm {
     pub first_name: String,
     pub last_name: String,
     pub username: String,
@@ -27,7 +28,7 @@ pub struct NewUser {
     pub hashed_password: String,
 }
 
-impl NewUser {
+impl UserForm {
     pub fn from_json(user_data: Value) -> Self {
         let extract_data = |s: &str| {
             user_data[s]
