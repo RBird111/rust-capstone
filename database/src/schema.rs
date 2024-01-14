@@ -7,8 +7,10 @@ diesel::table! {
         address -> Varchar,
         #[max_length = 40]
         city -> Varchar,
-        lat -> Numeric,
-        lng -> Numeric,
+        #[max_length = 40]
+        state -> Varchar,
+        lat -> Nullable<Numeric>,
+        lng -> Nullable<Numeric>,
     }
 }
 

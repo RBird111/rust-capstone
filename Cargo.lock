@@ -52,6 +52,7 @@ dependencies = [
  "num-bigint",
  "num-integer",
  "num-traits",
+ "serde",
 ]
 
 [[package]]
@@ -152,6 +153,7 @@ dependencies = [
 name = "database"
 version = "0.1.0"
 dependencies = [
+ "bigdecimal",
  "diesel",
  "dotenvy",
  "password-auth",
