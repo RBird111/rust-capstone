@@ -6,7 +6,7 @@
     # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bigdecimal = { version = "0.4.2", features = ["serde"] }
+    bigdecimal    = { version = "0.4.2", features = ["serde"] }
     dotenvy       = "0.15.7"
     password-auth = "1.0.0"
     serde         = { version = "1.0.194", features = ["derive"] }
