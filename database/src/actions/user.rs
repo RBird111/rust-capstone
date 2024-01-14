@@ -40,7 +40,7 @@ pub fn create_new_user(conn: &mut PgConnection, user_data: UserForm) -> DataResu
         .get_result(conn)?)
 }
 
-pub fn delete_by_id(conn: &mut PgConnection, user_id: i32) -> Value {
+pub fn delete_user(conn: &mut PgConnection, user_id: i32) -> Value {
     let success = r#"{"message": "User successfully deleted"}"#;
     let error = r#"{"message": "Unable to locate user"}"#;
 

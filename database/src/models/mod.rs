@@ -1,2 +1,2 @@
-pub mod locations;
+pub mod location;
 pub mod user;
