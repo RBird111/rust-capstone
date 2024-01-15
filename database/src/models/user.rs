@@ -28,7 +28,7 @@ pub struct User {
     pub hashed_password: String,
 }
 
-#[derive(Insertable, AsChangeset)]
+#[derive(Insertable, AsChangeset, Debug)]
 #[diesel(table_name = users)]
 pub struct UserForm {
     pub first_name: String,

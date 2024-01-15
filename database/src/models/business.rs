@@ -44,14 +44,15 @@ pub struct BusinessInsertable {
 }
 
 impl BusinessInsertable {
-    pub fn new(data: BusinessData, location_id: i32) -> Self {
-        let BusinessData {
+    pub fn new(
+        BusinessData {
             name,
             description,
             category,
             owner_id,
-        } = data;
-
+        }: BusinessData,
+        location_id: i32,
+    ) -> Self {
         Self {
             name,
             description,

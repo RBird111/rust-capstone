@@ -1,37 +1,59 @@
+use std::fs;
+
 use database::models;
-use database::schema::businesses;
-use database::schema::locations;
-use database::schema::users;
 use diesel::prelude::*;
 use diesel::PgConnection;
-use rand::seq::SliceRandom;
+use rand::seq::IteratorRandom;
 use serde_json::{from_str, Value};
 
 fn main() {
     let mut conn = database::establish_connection();
 
-    truncate_tables(&mut conn);
+    reset_tables(&mut conn);
     seed_users(&mut conn);
     seed_locations(&mut conn);
     seed_businesses(&mut conn);
 }
 
-fn truncate_tables(conn: &mut PgConnection) {
-    println!("Truncating tables...");
+fn reset_tables(conn: &mut PgConnection) {
+    println!("Resetting tables...");
 
-    diesel::delete(businesses::table)
-        .execute(conn)
-        .expect("error truncating businesses table");
+    let migrations = "./database/migrations/";
+    let directory = fs::read_dir(migrations).unwrap();
 
-    diesel::delete(locations::table)
-        .execute(conn)
-        .expect("error truncating locations table");
+    // Collect folder names as Strings
+    let mut folders: Vec<String> = directory
+        .into_iter()
+        .filter_map(std::io::Result::ok)
+        .map(|entry| entry.file_name().to_string_lossy().to_string())
+        .filter(|name| !name.starts_with("00000000000")) // Except the init folder
+        .map(|e| format!("{migrations}{e}"))
+        .collect();
 
-    diesel::delete(users::table)
-        .execute(conn)
-        .expect("error truncating users table");
+    folders.sort_unstable();
 
-    println!("Tables truncated.");
+    // Down
+    folders
+        .iter()
+        .rev()
+        .map(|s| format!("{s}/down.sql"))
+        .inspect(|s| println!("{s}"))
+        .filter_map(|s| fs::read_to_string(s).ok())
+        .for_each(|query| {
+            diesel::sql_query(query).execute(conn).unwrap();
+        });
+
+    // Up
+    folders
+        .iter()
+        .map(|s| format!("{s}/up.sql"))
+        .inspect(|s| println!("{s}"))
+        .filter_map(|s| fs::read_to_string(s).ok())
+        .for_each(|query| {
+            diesel::sql_query(query).execute(conn).unwrap();
+        });
+
+    println!("Tables reset.");
 }
 
 fn seed_users(conn: &mut PgConnection) {
@@ -70,24 +92,26 @@ fn seed_locations(conn: &mut PgConnection) {
 }
 
 fn seed_businesses(conn: &mut PgConnection) {
-    use database::actions::location::get_all_locations;
     use database::schema::businesses::dsl::*;
     use models::business::*;
 
     println!("\nSeeding businesses table...");
 
     let mut rng = rand::thread_rng();
-
-    let mut locations =
-        get_all_locations(conn).expect("error getting locations -- seed_businesses");
-    locations.shuffle(&mut rng);
+    let locations = (1..51).choose_multiple(&mut rng, 30);
+    let users = (1..51).choose_multiple(&mut rng, 30);
 
     let data = include_str!("./seed_data/businesses.json");
     let business_json: Vec<BusinessData> = from_str(data).expect("error parsing json");
     let business_data: Vec<BusinessInsertable> = business_json
         .into_iter()
+        .zip(users)
+        .map(|(data, owner)| BusinessData {
+            owner_id: Some(owner),
+            ..data
+        })
         .zip(locations)
-        .map(|(data, loc)| BusinessInsertable::new(data, loc.id))
+        .map(|(data, loc)| BusinessInsertable::new(data, loc))
         .collect();
 
     diesel::insert_into(businesses)

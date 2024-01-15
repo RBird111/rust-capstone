@@ -2,8 +2,6 @@ pub mod routes;
 
 use actix_web::web;
 use actix_web::{middleware, App, HttpResponse, HttpServer, Responder};
-use database::models::business::{BusinessData, BusinessForm};
-use database::models::location::LocationForm;
 use database::ConnectionPool;
 
 pub type DBPool = web::Data<ConnectionPool>;
@@ -29,28 +27,6 @@ async fn home() -> impl Responder {
     HttpResponse::Ok().body(index)
 }
 
-#[actix_web::get("/json")]
-async fn test_json() -> impl Responder {
-    let business = BusinessData {
-        name: "Test Business".to_string(),
-        description: "abcdefghijklmnopqrstuvwxyz".to_string(),
-        category: "Automotive".to_string(),
-        owner_id: None,
-    };
-
-    let location = LocationForm {
-        address: "4241 Test St".to_string(),
-        city: "Albuquerque".to_string(),
-        state: "NM".to_string(),
-        lat: None,
-        lng: None,
-    };
-
-    let test = BusinessForm { business, location };
-
-    HttpResponse::Ok().json(test)
-}
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenvy::dotenv().expect(".env not found");
@@ -71,7 +47,6 @@ async fn main() -> std::io::Result<()> {
             .wrap(middleware::Logger::new("%r %s"))
             .app_data(web::Data::new(pool.clone()))
             .service(home)
-            .service(test_json)
             .service(routes::api_routes())
     })
     .bind(("localhost", port))?
