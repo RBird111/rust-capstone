@@ -30,8 +30,11 @@ pub struct Business {
     pub owner_id: Option<i32>,
 }
 
-#[derive(Insertable, Debug, Clone, Serialize, Deserialize)]
+#[derive(Associations, Insertable, Debug, Clone, Serialize)]
 #[diesel(table_name = businesses)]
+#[diesel(belongs_to(Location))]
+#[diesel(belongs_to(User, foreign_key = owner_id))]
+#[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct BusinessInsertable {
     pub name: String,
     pub description: String,

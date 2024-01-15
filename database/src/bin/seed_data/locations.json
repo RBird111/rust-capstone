@@ -1,0 +1,352 @@
+[
+  {
+    "address": "15197 Arkansas Hill",
+    "city": "Lancaster",
+    "state": "Pennsylvania",
+    "lat": 40.0185,
+    "lng": -76.2976
+  },
+  {
+    "address": "04410 Donald Pass",
+    "city": "Saint Louis",
+    "state": "Missouri",
+    "lat": 38.5814,
+    "lng": -90.2625
+  },
+  {
+    "address": "768 Garrison Terrace",
+    "city": "Garden Grove",
+    "state": "California",
+    "lat": 33.783,
+    "lng": -118.0256
+  },
+  {
+    "address": "7650 Killdeer Hill",
+    "city": "Memphis",
+    "state": "Tennessee",
+    "lat": 35.1255,
+    "lng": -90.0424
+  },
+  {
+    "address": "80 Pepper Wood Place",
+    "city": "Decatur",
+    "state": "Georgia",
+    "lat": 33.7749,
+    "lng": -84.3046
+  },
+  {
+    "address": "60735 Nevada Street",
+    "city": "Columbus",
+    "state": "Ohio",
+    "lat": 39.969,
+    "lng": -83.0114
+  },
+  {
+    "address": "37 Columbus Place",
+    "city": "Dayton",
+    "state": "Ohio",
+    "lat": 39.8285,
+    "lng": -84.2024
+  },
+  {
+    "address": "3710 Marcy Trail",
+    "city": "Pasadena",
+    "state": "California",
+    "lat": 33.7866,
+    "lng": -118.2987
+  },
+  {
+    "address": "008 Bashford Avenue",
+    "city": "Honolulu",
+    "state": "Hawaii",
+    "lat": 21.2987,
+    "lng": -157.6985
+  },
+  {
+    "address": "999 Hanover Alley",
+    "city": "Santa Ana",
+    "state": "California",
+    "lat": 33.7465,
+    "lng": -117.8662
+  },
+  {
+    "address": "4730 Alpine Plaza",
+    "city": "Pasadena",
+    "state": "California",
+    "lat": 34.1669,
+    "lng": -118.1551
+  },
+  {
+    "address": "11603 Del Mar Hill",
+    "city": "San Antonio",
+    "state": "Texas",
+    "lat": 29.4106,
+    "lng": -98.4128
+  },
+  {
+    "address": "45 Sugar Hill",
+    "city": "Glendale",
+    "state": "California",
+    "lat": 34.1378,
+    "lng": -118.2424
+  },
+  {
+    "address": "286 Farragut Junction",
+    "city": "Albany",
+    "state": "New York",
+    "lat": 42.6149,
+    "lng": -73.9708
+  },
+  {
+    "address": "3 Helena Alley",
+    "city": "Harrisburg",
+    "state": "Pennsylvania",
+    "lat": 40.2944,
+    "lng": -76.8938
+  },
+  {
+    "address": "36 7th Street",
+    "city": "Riverside",
+    "state": "California",
+    "lat": 33.7529,
+    "lng": -116.0556
+  },
+  {
+    "address": "9705 Declaration Way",
+    "city": "Mc Keesport",
+    "state": "Pennsylvania",
+    "lat": 40.4344,
+    "lng": -80.0248
+  },
+  {
+    "address": "9 Novick Drive",
+    "city": "Charleston",
+    "state": "West Virginia",
+    "lat": 38.3358,
+    "lng": -81.6123
+  },
+  {
+    "address": "42 Jenifer Circle",
+    "city": "Lansing",
+    "state": "Michigan",
+    "lat": 42.7286,
+    "lng": -84.5517
+  },
+  {
+    "address": "7544 Pond Alley",
+    "city": "Atlanta",
+    "state": "Georgia",
+    "lat": 33.8444,
+    "lng": -84.474
+  },
+  {
+    "address": "357 Luster Circle",
+    "city": "Evansville",
+    "state": "Indiana",
+    "lat": 38.1071,
+    "lng": -87.5256
+  },
+  {
+    "address": "08 Sutteridge Alley",
+    "city": "Boston",
+    "state": "Massachusetts",
+    "lat": 42.3823,
+    "lng": -71.0323
+  },
+  {
+    "address": "83 Holy Cross Crossing",
+    "city": "San Antonio",
+    "state": "Texas",
+    "lat": 29.4375,
+    "lng": -98.4616
+  },
+  {
+    "address": "46331 Esker Crossing",
+    "city": "Memphis",
+    "state": "Tennessee",
+    "lat": 35.2017,
+    "lng": -89.9715
+  },
+  {
+    "address": "10298 Stone Corner Lane",
+    "city": "Cambridge",
+    "state": "Massachusetts",
+    "lat": 42.362,
+    "lng": -71.083
+  },
+  {
+    "address": "04672 Continental Circle",
+    "city": "Albany",
+    "state": "Georgia",
+    "lat": 31.55,
+    "lng": -84.0612
+  },
+  {
+    "address": "48711 Springs Pass",
+    "city": "Buffalo",
+    "state": "New York",
+    "lat": 42.9335,
+    "lng": -78.8115
+  },
+  {
+    "address": "8341 West Park",
+    "city": "Norman",
+    "state": "Oklahoma",
+    "lat": 35.233,
+    "lng": -97.4067
+  },
+  {
+    "address": "61 Larry Alley",
+    "city": "Memphis",
+    "state": "Tennessee",
+    "lat": 35.2017,
+    "lng": -89.9715
+  },
+  {
+    "address": "9 Morning Way",
+    "city": "Baltimore",
+    "state": "Maryland",
+    "lat": 39.2847,
+    "lng": -76.6205
+  },
+  {
+    "address": "473 Carey Point",
+    "city": "Columbus",
+    "state": "Georgia",
+    "lat": 32.491,
+    "lng": -84.8741
+  },
+  {
+    "address": "36177 Reindahl Junction",
+    "city": "Omaha",
+    "state": "Nebraska",
+    "lat": 41.2949,
+    "lng": -96.0546
+  },
+  {
+    "address": "3793 Glendale Lane",
+    "city": "Tucson",
+    "state": "Arizona",
+    "lat": 32.3366,
+    "lng": -111.1771
+  },
+  {
+    "address": "95 Waubesa Hill",
+    "city": "Springfield",
+    "state": "Missouri",
+    "lat": 37.1136,
+    "lng": -93.2896
+  },
+  {
+    "address": "95347 Bunting Junction",
+    "city": "Boynton Beach",
+    "state": "Florida",
+    "lat": 26.5354,
+    "lng": -80.1124
+  },
+  {
+    "address": "83868 Dwight Junction",
+    "city": "Tampa",
+    "state": "Florida",
+    "lat": 27.9671,
+    "lng": -82.4334
+  },
+  {
+    "address": "2032 International Trail",
+    "city": "Shreveport",
+    "state": "Louisiana",
+    "lat": 32.6076,
+    "lng": -93.7526
+  },
+  {
+    "address": "35478 Hanson Parkway",
+    "city": "Raleigh",
+    "state": "North Carolina",
+    "lat": 35.8887,
+    "lng": -78.6393
+  },
+  {
+    "address": "4 Rusk Circle",
+    "city": "Lincoln",
+    "state": "Nebraska",
+    "lat": 40.8247,
+    "lng": -96.6252
+  },
+  {
+    "address": "14 Golf View Avenue",
+    "city": "Albany",
+    "state": "Georgia",
+    "lat": 31.55,
+    "lng": -84.0612
+  },
+  {
+    "address": "717 Waubesa Drive",
+    "city": "Youngstown",
+    "state": "Ohio",
+    "lat": 41.1257,
+    "lng": -80.6277
+  },
+  {
+    "address": "06 Fuller Alley",
+    "city": "Shawnee Mission",
+    "state": "Kansas",
+    "lat": 39.0312,
+    "lng": -94.6308
+  },
+  {
+    "address": "16826 Little Fleur Plaza",
+    "city": "El Paso",
+    "state": "Texas",
+    "lat": 31.6948,
+    "lng": -106.3
+  },
+  {
+    "address": "13 Stone Corner Way",
+    "city": "Saint Petersburg",
+    "state": "Florida",
+    "lat": 27.7898,
+    "lng": -82.7243
+  },
+  {
+    "address": "1 Raven Place",
+    "city": "Philadelphia",
+    "state": "Pennsylvania",
+    "lat": 39.9473,
+    "lng": -75.15
+  },
+  {
+    "address": "0 Kenwood Lane",
+    "city": "Washington",
+    "state": "District of Columbia",
+    "lat": 38.8933,
+    "lng": -77.0146
+  },
+  {
+    "address": "9 Summerview Lane",
+    "city": "Pensacola",
+    "state": "Florida",
+    "lat": 30.4061,
+    "lng": -87.2917
+  },
+  {
+    "address": "4 Raven Junction",
+    "city": "Tucson",
+    "state": "Arizona",
+    "lat": 31.9701,
+    "lng": -111.8907
+  },
+  {
+    "address": "62 Basil Crossing",
+    "city": "Detroit",
+    "state": "Michigan",
+    "lat": 42.3809,
+    "lng": -83.0409
+  },
+  {
+    "address": "100 Lien Terrace",
+    "city": "Des Moines",
+    "state": "Iowa",
+    "lat": 41.6255,
+    "lng": -93.6736
+  }
+]

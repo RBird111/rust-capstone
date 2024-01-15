@@ -2,9 +2,9 @@ pub mod routes;
 
 use actix_web::web;
 use actix_web::{middleware, App, HttpResponse, HttpServer, Responder};
-use database::ConnectionPool;
 use database::models::business::{BusinessData, BusinessForm};
 use database::models::location::LocationForm;
+use database::ConnectionPool;
 
 pub type DBPool = web::Data<ConnectionPool>;
 
@@ -42,6 +42,8 @@ async fn test_json() -> impl Responder {
         address: "4241 Test St".to_string(),
         city: "Albuquerque".to_string(),
         state: "NM".to_string(),
+        lat: None,
+        lng: None,
     };
 
     let test = BusinessForm { business, location };
