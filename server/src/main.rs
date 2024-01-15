@@ -1,9 +1,12 @@
 pub mod routes;
 
-use actix_web::web::Data;
+use actix_web::web;
 use actix_web::{middleware, App, HttpResponse, HttpServer, Responder};
+use database::ConnectionPool;
 use database::models::business::{BusinessData, BusinessForm};
 use database::models::location::LocationForm;
+
+pub type DBPool = web::Data<ConnectionPool>;
 
 #[actix_web::get("/")]
 async fn home() -> impl Responder {
@@ -64,7 +67,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .wrap(middleware::Logger::new("%r %s"))
-            .app_data(Data::new(pool.clone()))
+            .app_data(web::Data::new(pool.clone()))
             .service(home)
             .service(test_json)
             .service(routes::api_routes())

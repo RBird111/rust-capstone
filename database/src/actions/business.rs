@@ -1,6 +1,5 @@
 use super::DataResult;
-use crate::actions::location::create_new_location;
-use crate::actions::location::get_location_by_address;
+use crate::actions::location::{create_new_location, get_location_by_address};
 use crate::models::business::*;
 use crate::schema::businesses::dsl::*;
 
