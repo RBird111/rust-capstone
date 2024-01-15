@@ -1,6 +1,19 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    businesses (id) {
+        id -> Int4,
+        #[max_length = 40]
+        name -> Varchar,
+        description -> Text,
+        #[max_length = 40]
+        category -> Varchar,
+        location_id -> Int4,
+        owner_id -> Nullable<Int4>,
+    }
+}
+
+diesel::table! {
     locations (id) {
         id -> Int4,
         #[max_length = 40]
@@ -29,7 +42,11 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(businesses -> locations (location_id));
+diesel::joinable!(businesses -> users (owner_id));
+
 diesel::allow_tables_to_appear_in_same_query!(
+    businesses,
     locations,
     users,
 );

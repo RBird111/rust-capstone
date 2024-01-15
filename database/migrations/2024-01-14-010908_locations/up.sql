@@ -1,4 +1,3 @@
--- Your SQL goes here
 create table locations (
     id serial not null primary key,
     address varchar(40) not null,

@@ -24,6 +24,4 @@ pub struct LocationForm {
     pub address: String,
     pub city: String,
     pub state: String,
-    pub lat: Option<BigDecimal>,
-    pub lng: Option<BigDecimal>,
 }
