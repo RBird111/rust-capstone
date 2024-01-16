@@ -17,6 +17,7 @@ pub fn create_new_business(conn: &mut PgConnection, data: BusinessForm) -> DataR
         Err(_) => create_new_location(conn, location)?,
         Ok(l) => l,
     };
+
     Ok(diesel::insert_into(businesses)
         .values(BusinessInsertable::new(business, location.id))
         .get_result(conn)?)

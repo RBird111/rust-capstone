@@ -1,4 +1,4 @@
-use actix_web::error::ErrorInternalServerError;
+use actix_web::error::ErrorUnauthorized;
 use actix_web::{post, web, HttpResponse, Responder};
 use database::actions::user;
 use database::models::user::{UserForm, UserLogin};
@@ -22,7 +22,7 @@ async fn login(state: DBPool, data: web::Json<UserLogin>) -> actix_web::Result<i
         user::login(&mut conn, user_data)
     })
     .await?
-    .map_err(ErrorInternalServerError)?;
+    .map_err(ErrorUnauthorized)?;
 
     Ok(HttpResponse::Ok().json(user))
 }
@@ -36,13 +36,14 @@ async fn signup(state: DBPool, data: web::Json<Value>) -> actix_web::Result<impl
         user::create_new_user(&mut conn, user_data)
     })
     .await?
-    .map_err(ErrorInternalServerError)?;
+    .map_err(ErrorUnauthorized)?;
 
     Ok(HttpResponse::Created().json(user))
 }
 
 #[post("/logout")]
 async fn logout(_state: DBPool) -> actix_web::Result<impl Responder> {
+    // TODO: Deal with logout
     // let success: &str = r#"{"message": "User logged out"}"#;
     // let error: &str = r#"{"message": "Unable to locate user"}"#;
     Ok(HttpResponse::Ok())

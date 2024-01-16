@@ -34,7 +34,7 @@ async fn main() -> std::io::Result<()> {
     let port: u16 = std::env::var("PORT")
         .expect("PORT must be set")
         .parse()
-        .expect("PORT must be an int");
+        .expect("PORT must be an integer");
 
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
