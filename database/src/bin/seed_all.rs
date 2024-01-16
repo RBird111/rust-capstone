@@ -13,6 +13,7 @@ fn main() {
     seed_users(&mut conn);
     seed_locations(&mut conn);
     seed_businesses(&mut conn);
+    seed_users_locations(&mut conn);
 }
 
 fn reset_tables(conn: &mut PgConnection) {
@@ -120,4 +121,29 @@ fn seed_businesses(conn: &mut PgConnection) {
         .expect("error inserting businesses");
 
     println!("Businesses table seeded.");
+}
+
+fn seed_users_locations(conn: &mut PgConnection) {
+    use database::schema::users_locations::dsl::*;
+    use models::users_locations::*;
+
+    println!("\nSeeding users_locations table...");
+
+    let mut rng = rand::thread_rng();
+    let user_locations: Vec<_> = (1..51)
+        .flat_map(|loc_id| (1..51).map(move |u_id| (u_id, loc_id)))
+        .choose_multiple(&mut rng, 50)
+        .into_iter()
+        .map(|(u, l)| UserLocation {
+            user_id: u,
+            location_id: l,
+        })
+        .collect();
+
+    diesel::insert_into(users_locations)
+        .values(user_locations)
+        .execute(conn)
+        .expect("error inserting users_locations");
+
+    println!("Users_locations table seeded.");
 }

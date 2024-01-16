@@ -4,7 +4,7 @@ use crate::schema::users_locations;
 
 use diesel::prelude::*;
 
-#[derive(Identifiable, Selectable, Queryable, Associations, Debug)]
+#[derive(Identifiable, Selectable, Queryable, Associations, Debug, Insertable)]
 #[diesel(belongs_to(User))]
 #[diesel(belongs_to(Location))]
 #[diesel(table_name = users_locations)]
