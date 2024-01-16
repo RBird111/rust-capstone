@@ -1,4 +1,4 @@
-use actix_web::error::ErrorUnauthorized;
+use actix_web::error::ErrorNotFound;
 use actix_web::{delete, get, post, put, web, HttpResponse, Responder};
 use database::actions::business;
 use database::models::business::*;
@@ -21,7 +21,7 @@ async fn get_all_businesses(state: DBPool) -> actix_web::Result<impl Responder> 
         business::get_all_businesses(&mut conn)
     })
     .await?
-    .map_err(ErrorUnauthorized)?;
+    .map_err(ErrorNotFound)?;
 
     Ok(HttpResponse::Ok().json(businesses))
 }
@@ -38,7 +38,7 @@ async fn create_new_business(
         business::create_new_business(&mut conn, business_data)
     })
     .await?
-    .map_err(ErrorUnauthorized)?;
+    .map_err(ErrorNotFound)?;
 
     Ok(HttpResponse::Created().json(business))
 }
@@ -55,7 +55,7 @@ async fn get_business_by_id(
         business::get_business_by_id(&mut conn, business_id)
     })
     .await?
-    .map_err(ErrorUnauthorized)?;
+    .map_err(ErrorNotFound)?;
 
     Ok(HttpResponse::Ok().json(business))
 }
@@ -72,7 +72,7 @@ async fn update_business(
         business::update_business(&mut conn, business_data)
     })
     .await?
-    .map_err(ErrorUnauthorized)?;
+    .map_err(ErrorNotFound)?;
 
     Ok(HttpResponse::Ok().json(business))
 }

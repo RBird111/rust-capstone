@@ -1,4 +1,4 @@
-use actix_web::error::ErrorUnauthorized;
+use actix_web::error::ErrorNotFound;
 use actix_web::{post, web, HttpResponse, Responder};
 use database::actions::user;
 use database::models::user::{UserForm, UserLogin};
@@ -22,7 +22,7 @@ async fn login(state: DBPool, data: web::Json<UserLogin>) -> actix_web::Result<i
         user::login(&mut conn, user_data)
     })
     .await?
-    .map_err(ErrorUnauthorized)?;
+    .map_err(ErrorNotFound)?;
 
     Ok(HttpResponse::Ok().json(user))
 }
@@ -36,7 +36,7 @@ async fn signup(state: DBPool, data: web::Json<Value>) -> actix_web::Result<impl
         user::create_new_user(&mut conn, user_data)
     })
     .await?
-    .map_err(ErrorUnauthorized)?;
+    .map_err(ErrorNotFound)?;
 
     Ok(HttpResponse::Created().json(user))
 }
