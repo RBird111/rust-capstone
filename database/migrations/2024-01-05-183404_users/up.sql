@@ -1,8 +1,8 @@
-create table users (
-  id serial not null primary key,
-  first_name varchar(40) not null,
-  last_name varchar(40) not null,
-  username varchar(40) not null unique,
-  email varchar(40) not null unique,
-  hashed_password text not null
+CREATE TABLE users (
+  id serial NOT NULL PRIMARY KEY,
+  first_name varchar(40) NOT NULL,
+  last_name varchar(40) NOT NULL,
+  username varchar(40) NOT NULL UNIQUE,
+  email varchar(40) NOT NULL UNIQUE,
+  hashed_password text NOT NULL
 );

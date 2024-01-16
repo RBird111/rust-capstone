@@ -42,11 +42,21 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    users_locations (user_id, location_id) {
+        user_id -> Int4,
+        location_id -> Int4,
+    }
+}
+
 diesel::joinable!(businesses -> locations (location_id));
 diesel::joinable!(businesses -> users (owner_id));
+diesel::joinable!(users_locations -> locations (location_id));
+diesel::joinable!(users_locations -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     businesses,
     locations,
     users,
+    users_locations,
 );
