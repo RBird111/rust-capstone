@@ -1,8 +1,7 @@
 use actix_web::error::ErrorInternalServerError;
-use actix_web::{delete, get, post, put, web, HttpResponse, Responder};
+use actix_web::{delete, get, put, web, HttpResponse, Responder};
 use database::actions::user;
-use database::models::user::{User, UserForm};
-use serde_json::Value;
+use database::models::user::User;
 
 use crate::DBPool;
 
@@ -10,7 +9,6 @@ pub fn user_routes() -> actix_web::Scope {
     actix_web::web::scope("/user")
         .service(get_all_users)
         .service(get_user_by_id)
-        .service(sign_up)
         .service(update_user)
         .service(delete_user)
 }
@@ -34,20 +32,6 @@ async fn get_user_by_id(state: DBPool, path: web::Path<i32>) -> actix_web::Resul
     let user = web::block(move || {
         let mut conn = state.get().expect("error connecting to database");
         user::get_user_by_id(&mut conn, user_id)
-    })
-    .await?
-    .map_err(ErrorInternalServerError)?;
-
-    Ok(HttpResponse::Ok().json(user))
-}
-
-#[post("/sign_up")]
-async fn sign_up(state: DBPool, data: web::Json<Value>) -> actix_web::Result<impl Responder> {
-    let user_data = UserForm::from_json(data.into_inner());
-
-    let user = web::block(move || {
-        let mut conn = state.get().expect("error connecting to database");
-        user::create_new_user(&mut conn, user_data)
     })
     .await?
     .map_err(ErrorInternalServerError)?;
