@@ -35,8 +35,8 @@ pub fn update_location(conn: &mut PgConnection, location: Location) -> DataResul
 }
 
 pub fn delete_location(conn: &mut PgConnection, location_id: i32) -> Value {
-    let success = r#"{"message": "User successfully deleted"}"#;
-    let error = r#"{"message": "Unable to locate user"}"#;
+    let success = r#"{"message": "Location successfully deleted"}"#;
+    let error = r#"{"message": "Unable to locate location"}"#;
 
     match diesel::delete(locations.find(location_id)).execute(conn) {
         Ok(0) => serde_json::from_str(error),

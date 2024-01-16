@@ -1,1 +1,1 @@
-drop table if exists businesses;
+DROP TABLE IF EXISTS businesses;

@@ -5,7 +5,17 @@ use password_auth::generate_hash;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Queryable, Selectable, Identifiable, Serialize, Debug, Clone)]
+#[derive(
+    AsChangeset,
+    Queryable,
+    Insertable,
+    Selectable,
+    Identifiable,
+    Serialize,
+    Deserialize,
+    Debug,
+    Clone,
+)]
 #[diesel(table_name = users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct User {
@@ -14,11 +24,11 @@ pub struct User {
     pub last_name: String,
     pub username: String,
     pub email: String,
-    #[serde(skip_serializing)]
+    #[serde(skip)]
     pub hashed_password: String,
 }
 
-#[derive(Insertable, AsChangeset)]
+#[derive(Insertable, AsChangeset, Debug)]
 #[diesel(table_name = users)]
 pub struct UserForm {
     pub first_name: String,

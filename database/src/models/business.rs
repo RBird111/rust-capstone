@@ -1,4 +1,4 @@
-use super::location::Location;
+use super::location::{Location, LocationForm};
 use super::user::User;
 use crate::schema::businesses;
 
@@ -30,11 +30,51 @@ pub struct Business {
     pub owner_id: Option<i32>,
 }
 
-#[derive(Insertable, Debug, Clone, Serialize, Deserialize)]
+#[derive(Associations, Insertable, Debug, Clone, Serialize)]
 #[diesel(table_name = businesses)]
-pub struct BusinessForm {
+#[diesel(belongs_to(Location))]
+#[diesel(belongs_to(User, foreign_key = owner_id))]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct BusinessInsertable {
+    pub name: String,
+    pub description: String,
+    pub category: String,
+    pub location_id: i32,
+    pub owner_id: Option<i32>,
+}
+
+impl BusinessInsertable {
+    pub fn new(
+        BusinessData {
+            name,
+            description,
+            category,
+            owner_id,
+        }: BusinessData,
+        location_id: i32,
+    ) -> Self {
+        Self {
+            name,
+            description,
+            category,
+            location_id,
+            owner_id,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BusinessData {
     pub name: String,
     pub description: String,
     pub category: String,
     pub owner_id: Option<i32>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct BusinessForm {
+    #[serde(flatten)]
+    pub business: BusinessData,
+    #[serde(flatten)]
+    pub location: LocationForm,
 }

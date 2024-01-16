@@ -546,6 +546,7 @@ dependencies = [
  "diesel",
  "dotenvy",
  "password-auth",
+ "rand",
  "serde",
  "serde_json",
 ]
