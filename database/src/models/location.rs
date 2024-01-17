@@ -18,7 +18,7 @@ pub struct Location {
     pub lng: Option<BigDecimal>,
 }
 
-#[derive(Insertable, Debug, Clone, Deserialize)]
+#[derive(Insertable, Debug, Clone, Deserialize, Serialize)]
 #[diesel(table_name = locations)]
 pub struct LocationForm {
     pub address: String,
