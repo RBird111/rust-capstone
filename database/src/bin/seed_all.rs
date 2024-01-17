@@ -27,7 +27,10 @@ fn reset_tables(conn: &mut PgConnection) {
         .into_iter()
         .filter_map(std::io::Result::ok)
         .map(|entry| entry.file_name().to_string_lossy().to_string())
-        .filter(|name| !name.starts_with("00000000000")) // Except the init folder
+        // except the init folder
+        .filter(|name| !name.starts_with("00000000000"))
+        // and the .keep file
+        .filter(|name| name != ".keep")
         .map(|e| format!("{migrations}{e}"))
         .collect();
 
