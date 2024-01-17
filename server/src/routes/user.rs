@@ -1,5 +1,5 @@
 use actix_web::error::ErrorNotFound;
-use actix_web::{delete, get, put, web, HttpResponse, Responder};
+use actix_web::{delete, get, put, web, HttpResponse, Responder, Result};
 use database::actions::user;
 use database::models::user::User;
 
@@ -14,7 +14,7 @@ pub fn user_routes() -> actix_web::Scope {
 }
 
 #[get("")]
-async fn get_all_users(state: DBPool) -> actix_web::Result<impl Responder> {
+async fn get_all_users(state: DBPool) -> Result<impl Responder> {
     let users = web::block(move || {
         let mut conn = state.get().expect("error connecting to database");
         user::get_all_users(&mut conn)
@@ -26,7 +26,7 @@ async fn get_all_users(state: DBPool) -> actix_web::Result<impl Responder> {
 }
 
 #[get("/{user_id}")]
-async fn get_user_by_id(state: DBPool, path: web::Path<i32>) -> actix_web::Result<impl Responder> {
+async fn get_user_by_id(state: DBPool, path: web::Path<i32>) -> Result<impl Responder> {
     let user_id = path.into_inner();
 
     let user = web::block(move || {
@@ -40,7 +40,7 @@ async fn get_user_by_id(state: DBPool, path: web::Path<i32>) -> actix_web::Resul
 }
 
 #[put("/curr")]
-async fn update_user(state: DBPool, data: web::Json<User>) -> actix_web::Result<impl Responder> {
+async fn update_user(state: DBPool, data: web::Json<User>) -> Result<impl Responder> {
     let user_data = data.into_inner();
 
     let updated_user = web::block(move || {
@@ -54,7 +54,7 @@ async fn update_user(state: DBPool, data: web::Json<User>) -> actix_web::Result<
 }
 
 #[delete("/curr")]
-async fn delete_user(state: DBPool, data: web::Json<User>) -> actix_web::Result<impl Responder> {
+async fn delete_user(state: DBPool, data: web::Json<User>) -> Result<impl Responder> {
     let user = data.into_inner();
 
     let message = web::block(move || {

@@ -1,5 +1,5 @@
 use actix_web::error::ErrorNotFound;
-use actix_web::{delete, get, post, put, web, HttpResponse, Responder};
+use actix_web::{delete, get, post, put, web, HttpResponse, Responder, Result};
 use database::actions::location;
 use database::models::location::*;
 
@@ -15,7 +15,7 @@ pub fn location_routes() -> actix_web::Scope {
 }
 
 #[get("")]
-async fn get_all_locations(state: DBPool) -> actix_web::Result<impl Responder> {
+async fn get_all_locations(state: DBPool) -> Result<impl Responder> {
     let locations = web::block(move || {
         let mut conn = state.get().expect("error connecting to database");
         location::get_all_locations(&mut conn)
@@ -27,10 +27,7 @@ async fn get_all_locations(state: DBPool) -> actix_web::Result<impl Responder> {
 }
 
 #[get("/{location_id}")]
-async fn get_location_by_id(
-    state: DBPool,
-    path: web::Path<i32>,
-) -> actix_web::Result<impl Responder> {
+async fn get_location_by_id(state: DBPool, path: web::Path<i32>) -> Result<impl Responder> {
     let location_id = path.into_inner();
 
     let location = web::block(move || {
@@ -47,7 +44,7 @@ async fn get_location_by_id(
 async fn create_new_location(
     state: DBPool,
     data: web::Json<LocationForm>,
-) -> actix_web::Result<impl Responder> {
+) -> Result<impl Responder> {
     let location_data = data.into_inner();
 
     let location = web::block(move || {
@@ -65,7 +62,7 @@ async fn update_location(
     state: DBPool,
     path: web::Path<i32>,
     data: web::Json<Location>,
-) -> actix_web::Result<impl Responder> {
+) -> Result<impl Responder> {
     let _location_id = path.into_inner();
     let location_data = data.into_inner();
 
@@ -80,7 +77,7 @@ async fn update_location(
 }
 
 #[delete("/{location_id}")]
-async fn delete_location(state: DBPool, path: web::Path<i32>) -> actix_web::Result<impl Responder> {
+async fn delete_location(state: DBPool, path: web::Path<i32>) -> Result<impl Responder> {
     let location_id = path.into_inner();
 
     let message = web::block(move || {

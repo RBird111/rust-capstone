@@ -1,6 +1,6 @@
 use std::fs;
 
-use database::models;
+use database::{models, schema};
 use diesel::prelude::*;
 use diesel::PgConnection;
 use rand::seq::IteratorRandom;
@@ -14,6 +14,7 @@ fn main() {
     seed_locations(&mut conn);
     seed_businesses(&mut conn);
     seed_users_locations(&mut conn);
+    seed_reviews(&mut conn);
 }
 
 fn reset_tables(conn: &mut PgConnection) {
@@ -27,7 +28,10 @@ fn reset_tables(conn: &mut PgConnection) {
         .into_iter()
         .filter_map(std::io::Result::ok)
         .map(|entry| entry.file_name().to_string_lossy().to_string())
-        .filter(|name| !name.starts_with("00000000000")) // Except the init folder
+        // except the init folder
+        .filter(|name| !name.starts_with("00000000000"))
+        // and the .keep file
+        .filter(|name| name != ".keep")
         .map(|e| format!("{migrations}{e}"))
         .collect();
 
@@ -58,8 +62,8 @@ fn reset_tables(conn: &mut PgConnection) {
 }
 
 fn seed_users(conn: &mut PgConnection) {
-    use database::schema::users::dsl::*;
     use models::user::*;
+    use schema::users::dsl::*;
 
     println!("\nSeeding users table...");
 
@@ -76,8 +80,8 @@ fn seed_users(conn: &mut PgConnection) {
 }
 
 fn seed_locations(conn: &mut PgConnection) {
-    use database::schema::locations::dsl::*;
     use models::location::*;
+    use schema::locations::dsl::*;
 
     println!("\nSeeding locations table...");
 
@@ -93,8 +97,8 @@ fn seed_locations(conn: &mut PgConnection) {
 }
 
 fn seed_businesses(conn: &mut PgConnection) {
-    use database::schema::businesses::dsl::*;
     use models::business::*;
+    use schema::businesses::dsl::*;
 
     println!("\nSeeding businesses table...");
 
@@ -124,8 +128,8 @@ fn seed_businesses(conn: &mut PgConnection) {
 }
 
 fn seed_users_locations(conn: &mut PgConnection) {
-    use database::schema::users_locations::dsl::*;
     use models::users_locations::*;
+    use schema::users_locations::dsl::*;
 
     println!("\nSeeding users_locations table...");
 
@@ -146,4 +150,21 @@ fn seed_users_locations(conn: &mut PgConnection) {
         .expect("error inserting users_locations");
 
     println!("Users_locations table seeded.");
+}
+
+fn seed_reviews(conn: &mut PgConnection) {
+    use models::review::ReviewForm;
+    use schema::reviews::dsl::*;
+
+    println!("\nSeeding reviews table...");
+
+    let data = include_str!("./seed_data/reviews.json");
+    let review_data: Vec<ReviewForm> = from_str(data).expect("error paring json");
+
+    diesel::insert_into(reviews)
+        .values(review_data)
+        .execute(conn)
+        .expect("error inserting reviews");
+
+    println!("Reviews table seeded.");
 }
