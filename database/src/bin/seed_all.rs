@@ -15,6 +15,7 @@ fn main() {
     seed_businesses(&mut conn);
     seed_users_locations(&mut conn);
     seed_reviews(&mut conn);
+    seed_images(&mut conn)
 }
 
 fn reset_tables(conn: &mut PgConnection) {
@@ -167,4 +168,39 @@ fn seed_reviews(conn: &mut PgConnection) {
         .expect("error inserting reviews");
 
     println!("Reviews table seeded.");
+}
+
+fn seed_images(conn: &mut PgConnection) {
+    use models::image::ImageForm;
+    use schema::images::dsl::*;
+
+    println!("\nSeeding images table...");
+
+    let extract_url = |val: Value| {
+        val["url"]
+            .as_str()
+            .expect("Error parsing image data.")
+            .to_string()
+    };
+
+    let data = include_str!("./seed_data/images.json");
+    let image_json: Vec<Value> = from_str(data).expect("error parsing json");
+    let image_data: Vec<ImageForm> = image_json
+        .into_iter()
+        .map(extract_url)
+        .zip(0..)
+        .map(|(url_, idx)| ImageForm {
+            url: url_,
+            user_id: (idx % 50) + 1,
+            business_id: Some((idx % 30) + 1),
+            review_id: Some(idx + 1),
+        })
+        .collect();
+
+    diesel::insert_into(images)
+        .values(image_data)
+        .execute(conn)
+        .expect("error inserting images");
+
+    println!("Images table seeded.");
 }
