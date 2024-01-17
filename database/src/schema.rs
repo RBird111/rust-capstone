@@ -28,6 +28,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    reviews (id) {
+        id -> Int4,
+        rating -> Int4,
+        body -> Text,
+        user_id -> Int4,
+        business_id -> Int4,
+    }
+}
+
+diesel::table! {
     users (id) {
         id -> Int4,
         #[max_length = 40]
@@ -51,12 +61,15 @@ diesel::table! {
 
 diesel::joinable!(businesses -> locations (location_id));
 diesel::joinable!(businesses -> users (owner_id));
+diesel::joinable!(reviews -> businesses (business_id));
+diesel::joinable!(reviews -> users (user_id));
 diesel::joinable!(users_locations -> locations (location_id));
 diesel::joinable!(users_locations -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     businesses,
     locations,
+    reviews,
     users,
     users_locations,
 );
