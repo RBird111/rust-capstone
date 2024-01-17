@@ -1,5 +1,5 @@
 use actix_web::error::ErrorNotFound;
-use actix_web::{delete, get, post, put, web, HttpResponse, Responder};
+use actix_web::{delete, get, post, put, web, HttpResponse, Responder, Result};
 use database::actions::business;
 use database::models::business::*;
 
@@ -15,7 +15,7 @@ pub fn business_routes() -> actix_web::Scope {
 }
 
 #[get("")]
-async fn get_all_businesses(state: DBPool) -> actix_web::Result<impl Responder> {
+async fn get_all_businesses(state: DBPool) -> Result<impl Responder> {
     let businesses = web::block(move || {
         let mut conn = state.get().expect("error connecting to database");
         business::get_all_businesses(&mut conn)
@@ -30,7 +30,7 @@ async fn get_all_businesses(state: DBPool) -> actix_web::Result<impl Responder> 
 async fn create_new_business(
     state: DBPool,
     data: web::Json<BusinessForm>,
-) -> actix_web::Result<impl Responder> {
+) -> Result<impl Responder> {
     let business_data = data.into_inner();
 
     let business = web::block(move || {
@@ -44,10 +44,7 @@ async fn create_new_business(
 }
 
 #[get("/{business_id}")]
-async fn get_business_by_id(
-    state: DBPool,
-    path: web::Path<i32>,
-) -> actix_web::Result<impl Responder> {
+async fn get_business_by_id(state: DBPool, path: web::Path<i32>) -> Result<impl Responder> {
     let business_id = path.into_inner();
 
     let business = web::block(move || {
@@ -61,10 +58,7 @@ async fn get_business_by_id(
 }
 
 #[put("/{business_id}")]
-async fn update_business(
-    state: DBPool,
-    data: web::Json<Business>,
-) -> actix_web::Result<impl Responder> {
+async fn update_business(state: DBPool, data: web::Json<Business>) -> Result<impl Responder> {
     let business_data = data.into_inner();
 
     let business = web::block(move || {
@@ -78,7 +72,7 @@ async fn update_business(
 }
 
 #[delete("/{business_id}")]
-async fn delete_business(state: DBPool, path: web::Path<i32>) -> actix_web::Result<impl Responder> {
+async fn delete_business(state: DBPool, path: web::Path<i32>) -> Result<impl Responder> {
     let business_id = path.into_inner();
 
     let message = web::block(move || {

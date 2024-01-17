@@ -1,5 +1,5 @@
 use actix_web::error::ErrorNotFound;
-use actix_web::{post, web, HttpResponse, Responder};
+use actix_web::{post, web, HttpResponse, Responder, Result};
 use database::actions::user;
 use database::models::user::{UserForm, UserLogin};
 use serde_json::Value;
@@ -14,7 +14,7 @@ pub fn auth_routes() -> actix_web::Scope {
 }
 
 #[post("/login")]
-async fn login(state: DBPool, data: web::Json<UserLogin>) -> actix_web::Result<impl Responder> {
+async fn login(state: DBPool, data: web::Json<UserLogin>) -> Result<impl Responder> {
     let user_data = data.into_inner();
 
     let user = web::block(move || {
@@ -28,7 +28,7 @@ async fn login(state: DBPool, data: web::Json<UserLogin>) -> actix_web::Result<i
 }
 
 #[post("/signup")]
-async fn signup(state: DBPool, data: web::Json<Value>) -> actix_web::Result<impl Responder> {
+async fn signup(state: DBPool, data: web::Json<Value>) -> Result<impl Responder> {
     let user_data = UserForm::from_json(data.into_inner());
 
     let user = web::block(move || {
@@ -42,7 +42,7 @@ async fn signup(state: DBPool, data: web::Json<Value>) -> actix_web::Result<impl
 }
 
 #[post("/logout")]
-async fn logout(_state: DBPool) -> actix_web::Result<impl Responder> {
+async fn logout(_state: DBPool) -> Result<impl Responder> {
     // TODO: Deal with logout
     // let success: &str = r#"{"message": "User logged out"}"#;
     // let error: &str = r#"{"message": "Unable to locate user"}"#;
