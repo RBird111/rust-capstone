@@ -14,6 +14,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    images (id) {
+        id -> Int4,
+        url -> Text,
+        user_id -> Int4,
+        business_id -> Nullable<Int4>,
+        review_id -> Nullable<Int4>,
+    }
+}
+
+diesel::table! {
     locations (id) {
         id -> Int4,
         #[max_length = 40]
@@ -61,6 +71,9 @@ diesel::table! {
 
 diesel::joinable!(businesses -> locations (location_id));
 diesel::joinable!(businesses -> users (owner_id));
+diesel::joinable!(images -> businesses (business_id));
+diesel::joinable!(images -> reviews (review_id));
+diesel::joinable!(images -> users (user_id));
 diesel::joinable!(reviews -> businesses (business_id));
 diesel::joinable!(reviews -> users (user_id));
 diesel::joinable!(users_locations -> locations (location_id));
@@ -68,6 +81,7 @@ diesel::joinable!(users_locations -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     businesses,
+    images,
     locations,
     reviews,
     users,
