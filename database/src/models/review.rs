@@ -36,3 +36,11 @@ pub struct ReviewForm {
     pub user_id: i32,
     pub business_id: i32,
 }
+
+#[derive(Debug, Serialize, Clone)]
+pub struct ReviewFull {
+    #[serde(flatten)]
+    pub review: Review,
+    pub user: User,
+    pub business: Business,
+}
