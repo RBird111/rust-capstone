@@ -1,69 +1,63 @@
 use super::DataResult;
-use crate::models::business::Business;
-use crate::models::image::Image;
 use crate::models::review::*;
 use crate::models::user::User;
 use crate::schema::reviews::dsl::*;
-use crate::schema::{businesses, images, users};
 
 use diesel::prelude::*;
 use diesel::PgConnection;
 use rand::seq::SliceRandom;
-use serde_json::{json, to_value, Value};
+use serde_json::{json, Value};
 
-pub fn get_all_reviews(conn: &mut PgConnection) -> DataResult<Vec<ReviewFull>> {
-    let review_data: Vec<(Review, User, Business, Image)> = reviews
-        .inner_join(users::table)
-        .inner_join(businesses::table)
-        .inner_join(images::table)
-        .select((
-            Review::as_select(),
-            User::as_select(),
-            Business::as_select(),
-            Image::as_select(),
-        ))
-        .load(conn)?;
+pub fn get_all_reviews(conn: &mut PgConnection) -> DataResult<Value> {
+    let review_data: Vec<_> = reviews.select(Review::as_select()).load(conn)?;
 
-    Ok(review_data
+    Ok(json!({
+        "reviews": review_data
         .into_iter()
-        .map(|(review, user, business, image)| ReviewFull {
-            review,
-            user,
-            business,
-            images: vec![image]
-        })
-        .collect())
+        .filter_map(|r| r.eager_load(conn).ok())
+        .collect::<Vec<Value>>()
+    }))
 }
 
-pub fn get_review_by_id(conn: &mut PgConnection, review_id: i32) -> DataResult<Review> {
-    Ok(reviews.find(review_id).first(conn)?)
+pub fn get_review_by_id(conn: &mut PgConnection, review_id: i32) -> DataResult<Value> {
+    Ok(json!({
+        "review": reviews
+        .find(review_id)
+        .first::<Review>(conn)?
+        .eager_load(conn)?
+    }))
 }
 
 pub fn get_random_reviews(conn: &mut PgConnection, num: usize) -> DataResult<Value> {
     let mut rng = rand::thread_rng();
-    let all_reviews = get_all_reviews(conn)?;
-    let rand_reviews: Vec<ReviewFull> = all_reviews
-        .choose_multiple(&mut rng, num)
-        .cloned()
-        .collect();
-    let res: Vec<Value> = rand_reviews
-        .into_iter()
-        .filter_map(|r| to_value(&r).ok())
-        .collect();
+
+    let all_reviews: Vec<Review> = reviews.select(Review::as_select()).load(conn)?;
 
     Ok(json!({
-        "reviews": res
+        "reviews": all_reviews
+        .choose_multiple(&mut rng, num)
+        .cloned()
+        .filter_map(|r| r.eager_load(conn).ok())
+        .collect::<Vec<Value>>()
     }))
 }
 
-pub fn create_new_review(conn: &mut PgConnection, review: ReviewForm) -> DataResult<Review> {
-    Ok(diesel::insert_into(reviews)
+pub fn create_new_review(conn: &mut PgConnection, review: ReviewForm) -> DataResult<Value> {
+    let new_review: Review = diesel::insert_into(reviews)
         .values(review)
-        .get_result(conn)?)
+        .get_result(conn)?;
+
+    Ok(json!({
+        "review": new_review.eager_load(conn)?
+    }))
 }
 
-pub fn update_review(conn: &mut PgConnection, review: Review) -> DataResult<Review> {
-    Ok(diesel::update(reviews).set(review).get_result(conn)?)
+pub fn update_review(conn: &mut PgConnection, review: Review) -> DataResult<Value> {
+    let updated_review: Review = diesel::update(reviews).set(review).get_result(conn)?;
+
+    Ok(json!({
+        "review": updated_review.eager_load(conn)?
+    }))
 }
 
 pub fn delete_review(conn: &mut PgConnection, review_id: i32) -> Value {
@@ -78,9 +72,16 @@ pub fn delete_review(conn: &mut PgConnection, review_id: i32) -> Value {
     .expect("error serializing message")
 }
 
-pub fn get_user_reviews(conn: &mut PgConnection, curr_user: User) -> DataResult<Vec<Review>> {
-    Ok(reviews
+pub fn get_user_reviews(conn: &mut PgConnection, curr_user: User) -> DataResult<Value> {
+    let user_reviews: Vec<Review> = reviews
         .select(Review::as_select())
         .filter(user_id.eq(curr_user.id))
-        .load(conn)?)
+        .load(conn)?;
+
+    Ok(json!({
+        "reviews": user_reviews
+        .into_iter()
+        .filter_map(|r| r.eager_load(conn).ok())
+        .collect::<Vec<Value>>()
+    }))
 }

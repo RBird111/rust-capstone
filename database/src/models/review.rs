@@ -1,6 +1,6 @@
 use crate::models::business::Business;
 use crate::models::user::User;
-use crate::schema::reviews;
+use crate::schema::{businesses, images, reviews, users};
 
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -30,6 +30,30 @@ pub struct Review {
     pub business_id: i32,
 }
 
+impl Review {
+    pub fn eager_load(&self, conn: &mut PgConnection) -> QueryResult<serde_json::Value> {
+        let business: Business = businesses::table.find(self.business_id).first(conn)?;
+        let user: User = users::table.find(self.user_id).first(conn)?;
+        let images: Vec<Image> = images::table
+            .select(Image::as_select())
+            .filter(images::review_id.eq(self.id))
+            .load(conn)?;
+
+        let result = serde_json::json!({
+            "id": self.id,
+            "rating": self.rating,
+            "body": self.body,
+            "user_id": self.user_id,
+            "business_id": self.business_id,
+            "user": serde_json::to_value(user).unwrap(),
+            "business": serde_json::to_value(business).unwrap(),
+            "images": serde_json::to_value(images).unwrap()
+        });
+
+        Ok(result)
+    }
+}
+
 #[derive(Debug, Deserialize, Insertable)]
 #[diesel(table_name = reviews)]
 pub struct ReviewForm {
@@ -37,13 +61,4 @@ pub struct ReviewForm {
     pub body: String,
     pub user_id: i32,
     pub business_id: i32,
-}
-
-#[derive(Debug, Serialize, Clone)]
-pub struct ReviewFull {
-    #[serde(flatten)]
-    pub review: Review,
-    pub user: User,
-    pub business: Business,
-    pub images: Vec<Image>,
 }
