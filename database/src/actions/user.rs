@@ -31,7 +31,7 @@ pub fn login(conn: &mut PgConnection, login: UserLogin) -> DataResult<Value> {
     verify_password(password, &user.hashed_password)
         .map_err(|_| diesel::result::Error::NotFound)?;
 
-    Ok(user.eager_load(conn)?)
+    Ok(user.get_result(conn)?)
 }
 
 pub fn create_new_user(conn: &mut PgConnection, user_data: UserForm) -> DataResult<Value> {
@@ -40,7 +40,7 @@ pub fn create_new_user(conn: &mut PgConnection, user_data: UserForm) -> DataResu
         .returning(User::as_returning())
         .get_result(conn)?;
 
-    Ok(new_user.eager_load(conn)?)
+    Ok(new_user.get_result(conn)?)
 }
 
 pub fn update_user(conn: &mut PgConnection, user: User) -> DataResult<Value> {
