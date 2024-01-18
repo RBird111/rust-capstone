@@ -1,5 +1,6 @@
 pub mod auth;
 pub mod business;
+pub mod image;
 pub mod location;
 pub mod review;
 pub mod user;
@@ -11,4 +12,5 @@ pub fn api_routes() -> actix_web::Scope {
         .service(location::location_routes())
         .service(business::business_routes())
         .service(review::review_routes())
+        .service(image::image_routes())
 }
