@@ -1,5 +1,6 @@
 pub mod routes;
 
+use actix_files as fs;
 use actix_web::web;
 use actix_web::{middleware, App, HttpResponse, HttpServer, Responder};
 use database::ConnectionPool;
@@ -8,22 +9,7 @@ pub type DBPool = web::Data<ConnectionPool>;
 
 #[actix_web::get("/")]
 async fn home() -> impl Responder {
-    let index = r#"
-    <head>
-        <title>Test Title</title>
-    </head>
-
-    <h1>Hello World!</h1>
-
-    <p>This is a test sentence.</p>
-
-    <a style="display: block" href="/json">Test Link</a>
-
-    <br/>
-
-    <button style="background-color: blue">Test Button</button>
-    "#;
-
+    let index = include_str!("../../frontend/build/index.html");
     HttpResponse::Ok().body(index)
 }
 
@@ -48,6 +34,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(pool.clone()))
             .service(home)
             .service(routes::api_routes())
+            .service(fs::Files::new("/", "./frontend/build").show_files_listing())
     })
     .bind(("localhost", port))?
     .run()

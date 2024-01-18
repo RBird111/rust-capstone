@@ -1,32 +1,36 @@
 use super::DataResult;
 use crate::models::business::Business;
+use crate::models::image::Image;
 use crate::models::review::*;
 use crate::models::user::User;
 use crate::schema::reviews::dsl::*;
-use crate::schema::{businesses, users};
+use crate::schema::{businesses, images, users};
 
 use diesel::prelude::*;
 use diesel::PgConnection;
 use rand::seq::SliceRandom;
-use serde_json::Value;
+use serde_json::{json, to_value, Value};
 
 pub fn get_all_reviews(conn: &mut PgConnection) -> DataResult<Vec<ReviewFull>> {
-    let review_data: Vec<(Review, User, Business)> = reviews
+    let review_data: Vec<(Review, User, Business, Image)> = reviews
         .inner_join(users::table)
         .inner_join(businesses::table)
+        .inner_join(images::table)
         .select((
             Review::as_select(),
             User::as_select(),
             Business::as_select(),
+            Image::as_select(),
         ))
         .load(conn)?;
 
     Ok(review_data
         .into_iter()
-        .map(|(review, user, business)| ReviewFull {
+        .map(|(review, user, business, image)| ReviewFull {
             review,
             user,
             business,
+            images: vec![image]
         })
         .collect())
 }
@@ -35,13 +39,21 @@ pub fn get_review_by_id(conn: &mut PgConnection, review_id: i32) -> DataResult<R
     Ok(reviews.find(review_id).first(conn)?)
 }
 
-pub fn get_random_reviews(conn: &mut PgConnection, num: usize) -> DataResult<Vec<ReviewFull>> {
+pub fn get_random_reviews(conn: &mut PgConnection, num: usize) -> DataResult<Value> {
     let mut rng = rand::thread_rng();
     let all_reviews = get_all_reviews(conn)?;
-    Ok(all_reviews
+    let rand_reviews: Vec<ReviewFull> = all_reviews
         .choose_multiple(&mut rng, num)
         .cloned()
-        .collect())
+        .collect();
+    let res: Vec<Value> = rand_reviews
+        .into_iter()
+        .filter_map(|r| to_value(&r).ok())
+        .collect();
+
+    Ok(json!({
+        "reviews": res
+    }))
 }
 
 pub fn create_new_review(conn: &mut PgConnection, review: ReviewForm) -> DataResult<Review> {

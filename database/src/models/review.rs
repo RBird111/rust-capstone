@@ -5,6 +5,8 @@ use crate::schema::reviews;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
+use super::image::Image;
+
 #[derive(
     Associations,
     Queryable,
@@ -43,4 +45,5 @@ pub struct ReviewFull {
     pub review: Review,
     pub user: User,
     pub business: Business,
+    pub images: Vec<Image>,
 }
