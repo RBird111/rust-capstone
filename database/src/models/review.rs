@@ -33,6 +33,12 @@ pub struct Review {
 
 impl Review {
     pub fn eager_load(&self, conn: &mut PgConnection) -> QueryResult<Value> {
+        Ok(serde_json::json!({
+            "review": self.get_result(conn)?
+        }))
+    }
+
+    fn get_result(&self, conn: &mut PgConnection) -> QueryResult<Value> {
         let business: Business = businesses::table.find(self.business_id).first(conn)?;
         let user: User = users::table.find(self.user_id).first(conn)?;
         let images: Vec<Image> = images::table
@@ -48,26 +54,7 @@ impl Review {
         })
         .unwrap();
 
-        Ok(serde_json::json!({
-            "review": result
-        }))
-    }
-
-    fn parse(&self, conn: &mut PgConnection) -> QueryResult<Value> {
-        let business: Business = businesses::table.find(self.business_id).first(conn)?;
-        let user: User = users::table.find(self.user_id).first(conn)?;
-        let images: Vec<Image> = images::table
-            .select(Image::as_select())
-            .filter(images::review_id.eq(self.id))
-            .load(conn)?;
-
-        Ok(serde_json::to_value(ReviewFull {
-            review: self.clone(),
-            user,
-            business,
-            images,
-        })
-        .unwrap())
+        Ok(result)
     }
 }
 
@@ -102,7 +89,7 @@ impl ReviewArray {
             .0
             .clone()
             .into_iter()
-            .filter_map(|r| r.parse(conn).ok())
+            .filter_map(|r| r.get_result(conn).ok())
             .collect();
 
         Ok(serde_json::json!({
