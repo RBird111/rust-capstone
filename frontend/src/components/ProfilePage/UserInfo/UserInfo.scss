@@ -1,0 +1,70 @@
+@use "../../../base.scss" as base;
+
+div.user-info-form {
+  cursor: default;
+
+  outline: 2px solid base.$orange;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px;
+  padding-bottom: 17px;
+
+  .field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .disp-ele {
+      width: 200px;
+    }
+
+    input {
+      margin-right: 3px;
+      border: none;
+      outline: 1px solid base.$gray;
+      font-size: 18px;
+      border-radius: 3px;
+      padding: 0 5px;
+      text-align: right;
+      width: 68%;
+    }
+
+    input:focus {
+      outline: 2px solid base.$blue;
+    }
+
+    .submit {
+      border: none;
+      background-color: white;
+    }
+
+    .label {
+      margin-right: 20px;
+      font-family: "Amatic SC", cursive;
+      font-size: 30px;
+      font-weight: bold;
+      color: base.$blue;
+    }
+
+    .value {
+      font-size: 18px;
+      text-align: right;
+    }
+
+    i {
+      cursor: pointer;
+      margin-left: 10px;
+      font-size: 18px;
+    }
+
+    i:hover {
+      color: base.$red;
+    }
+
+    i.fa-check:hover {
+      color: base.$green;
+    }
+  }
+}

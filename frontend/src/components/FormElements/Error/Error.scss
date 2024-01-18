@@ -1,0 +1,6 @@
+@use "../../../base.scss" as base;
+
+p.p-error {
+  color: base.$red;
+  font-size: 12px;
+}

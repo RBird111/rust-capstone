@@ -1,0 +1,15 @@
+@use "../../../base.scss" as base;
+
+.div-logo {
+  color: black;
+
+  font-family: "Amatic SC", cursive;
+  font-size: 40px;
+  font-weight: bold;
+
+  .w {
+    color: base.$red;
+    font-weight: normal;
+    font-family: "Open Sans", sans-serif;
+  }
+}

@@ -1,0 +1,123 @@
+@import "../../base.scss";
+
+.upload-images {
+  position: relative;
+  width: 500px;
+
+  &,
+  .image-container,
+  form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  form {
+    label {
+      cursor: pointer;
+      color: white;
+      background-color: $red;
+      padding: 10px 15px;
+
+      &:hover {
+        box-shadow: 0 0 3px black;
+      }
+
+      input {
+        width: 0;
+        height: 0;
+      }
+    }
+
+    .image-container {
+      width: 450px;
+      height: 450px;
+      border: 1px solid $gray;
+      border-radius: 5px;
+
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+
+      overflow-x: hidden;
+      overflow-y: scroll;
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0turn);
+        }
+
+        100% {
+          transform: rotate(1turn);
+        }
+      }
+
+      .image-loader {
+        z-index: 2;
+        position: absolute;
+        width: 90px;
+        height: 90px;
+        border-radius: 500%;
+        border: 15px solid $gray;
+        border-top: 15px solid $red;
+        animation: spin 2s linear infinite;
+      }
+
+      .img-feed-itm {
+        cursor: pointer;
+        position: relative;
+        width: 100%;
+        height: calc(450px * 0.49);
+        margin: 0 auto;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+
+          transition: filter 0.6s ease;
+        }
+
+        .hover-card {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          border-radius: 2px;
+          text-align: center;
+
+          color: white;
+          background-color: rgba(0, 0, 0, 0.55);
+          transition: opacity 0.6s ease;
+
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
+          p {
+            margin-bottom: 10px;
+          }
+
+          i {
+            color: $red;
+          }
+        }
+
+        &:hover {
+          img {
+            filter: blur(7px);
+            -webkit-filter: blur(7px);
+          }
+
+          .hover-card {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+}

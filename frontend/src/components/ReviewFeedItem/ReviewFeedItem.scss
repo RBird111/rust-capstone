@@ -1,0 +1,47 @@
+@use "../../base.scss" as base;
+
+div.review-feed-item {
+  cursor: default;
+
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+
+  margin: 10px 0;
+
+  border-radius: 3px;
+
+  outline: 1px solid base.$gray;
+
+  .name-tag {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 10px;
+
+    p {
+      margin-left: 10px;
+      font-weight: bold;
+      font-size: 19px;
+    }
+
+    .edit-icon {
+      cursor: pointer;
+      margin-left: 12px;
+      padding: 0 7px;
+    }
+
+    .edit-icon:hover {
+      color: base.$red;
+    }
+  }
+
+  .rating-bar {
+    margin-bottom: 10px;
+  }
+
+  .body {
+    margin-bottom: 10px;
+    overflow-wrap: break-word;
+  }
+}

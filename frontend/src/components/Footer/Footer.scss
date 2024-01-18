@@ -1,0 +1,92 @@
+@use "../../base.scss" as base;
+
+.footer {
+  z-index: 1;
+  cursor: default;
+
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+
+  position: fixed;
+  bottom: 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: base.$red;
+
+  width: 100%;
+  height: 15px;
+
+  padding-top: 7px;
+  padding-bottom: 7px;
+
+  i {
+    color: white;
+
+    font-size: 18px;
+
+    padding: 0 4px;
+  }
+
+  p {
+    color: white;
+    font-weight: bold;
+
+    padding: 0 15px;
+
+    font-family: "Amatic SC", cursive;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  p:hover {
+    color: base.$orange;
+  }
+
+  .repo-link {
+    a {
+      color: white;
+      font-weight: bold;
+
+      font-family: "Amatic SC", cursive;
+      font-size: 18px;
+      font-weight: bolder;
+    }
+
+    i {
+      font-weight: normal;
+      color: base.$red;
+    }
+
+    .fa-html5,
+    .fa-css3 {
+      transition: color 0.8s;
+    }
+
+    .fa-python,
+    .fa-js {
+      transition: color 1.2s 0.3s;
+    }
+  }
+
+  .repo-link:hover {
+    i {
+      color: white;
+    }
+  }
+
+  .personal-info {
+    display: flex;
+    align-items: center;
+
+    p {
+      padding-right: 4px;
+    }
+
+    i:hover {
+      color: base.$blue;
+    }
+  }
+}

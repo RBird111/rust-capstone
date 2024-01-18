@@ -1,0 +1,91 @@
+@use "../../base.scss" as base;
+
+.category-wrap:hover {
+  .background {
+    filter: blur(7px);
+    -webkit-filter: blur(7px);
+  }
+
+  div.category-card {
+    box-shadow: 0 0 2px black;
+    font-size: 20px;
+
+    color: base.$red;
+    background-color: rgba(0, 0, 0, 0.55);
+
+    .category-name {
+      font-size: 20px;
+      color: white;
+    }
+  }
+}
+
+.category-wrap {
+  position: relative;
+
+  .background {
+    z-index: -1;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    filter: blur(2px);
+    -webkit-filter: blur(2px);
+
+    background-size: cover;
+    background-position: center;
+
+    width: 18vw;
+    min-width: 200px;
+
+    height: 18vw;
+    min-height: 200px;
+
+    padding: 7px;
+    border-radius: 7px;
+
+    border: 1px solid base.$gray;
+
+    transition: filter 0.5s;
+  }
+
+  div.category-card {
+    cursor: pointer;
+
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid base.$gray;
+    border-radius: 7px;
+
+    padding: 7px;
+    margin-bottom: 30px;
+
+    width: 18vw;
+    min-width: 200px;
+
+    height: 18vw;
+    min-height: 200px;
+
+    transition: background-color 0.5s;
+
+    i {
+      padding-bottom: 15px;
+      transition-property: font-size color;
+      transition: 0.3s ease-out;
+    }
+
+    .category-name {
+      font-size: 18px;
+      font-weight: bold;
+
+      padding-top: 15px;
+      transition-property: font-size color;
+      transition: 0.3s ease-out;
+    }
+  }
+}

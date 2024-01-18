@@ -1,0 +1,25 @@
+div.landing-page {
+  overflow-y: scroll;
+  height: 88.7vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-bottom: 30px;
+
+  .title {
+    margin: 40px 0;
+  }
+
+  div.reviews,
+  div.categories {
+    margin: 0 auto;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    width: 90%;
+  }
+}
