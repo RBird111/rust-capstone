@@ -1,6 +1,6 @@
 use super::image::Image;
 use super::location::{Location, LocationForm};
-use super::review::Review;
+use super::review::{Review, ReviewFull};
 use super::user::User;
 use crate::schema::{businesses, locations, users};
 
@@ -68,6 +68,11 @@ impl Business {
             .map(|r| r.rating as f64)
             .fold((0., 0.), |(s, c), r| (s + r, c + 1.));
         let avg_rating = sum / count;
+
+        let reviews: Vec<ReviewFull> = reviews
+            .into_iter()
+            .filter_map(|r| r.into_full(conn).ok())
+            .collect();
 
         let full_business = BusinessFull {
             business: self.clone(),
@@ -138,7 +143,7 @@ pub struct BusinessFull {
     pub owner: Option<User>,
     pub location: Location,
     pub avg_rating: f64,
-    pub reviews: Vec<Review>,
+    pub reviews: Vec<ReviewFull>,
     pub images: Vec<Image>,
 }
 

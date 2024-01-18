@@ -38,7 +38,7 @@ impl Review {
         }))
     }
 
-    fn get_result(&self, conn: &mut PgConnection) -> QueryResult<Value> {
+    pub fn get_result(&self, conn: &mut PgConnection) -> QueryResult<Value> {
         let business: Business = businesses::table.find(self.business_id).first(conn)?;
         let user: User = users::table.find(self.user_id).first(conn)?;
         let images: Vec<Image> = images::table
@@ -55,6 +55,22 @@ impl Review {
         .unwrap();
 
         Ok(result)
+    }
+
+    pub fn into_full(&self, conn: &mut PgConnection) -> QueryResult<ReviewFull> {
+        let business: Business = businesses::table.find(self.business_id).first(conn)?;
+        let user: User = users::table.find(self.user_id).first(conn)?;
+        let images: Vec<Image> = images::table
+            .select(Image::as_select())
+            .filter(images::review_id.eq(self.id))
+            .load(conn)?;
+
+        Ok(ReviewFull {
+            review: self.clone(),
+            user,
+            business,
+            images,
+        })
     }
 }
 
