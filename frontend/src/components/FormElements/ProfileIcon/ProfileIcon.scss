@@ -1,0 +1,19 @@
+@use "../../../base.scss" as base;
+
+div.icon-div {
+  i.profile-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 20px;
+    width: 20px;
+    font-size: 20px;
+
+    padding: 10px;
+    border-radius: 50%;
+
+    color: white;
+    background-color: base.$blue;
+  }
+}

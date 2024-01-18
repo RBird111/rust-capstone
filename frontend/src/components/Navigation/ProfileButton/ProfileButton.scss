@@ -1,0 +1,85 @@
+@use "../../../base.scss" as base;
+
+.profile-button-div {
+  margin-right: 20px;
+
+  .icon-div {
+    cursor: pointer;
+  }
+
+  .icon-div:hover {
+    i {
+      background-color: base.$red;
+    }
+  }
+
+  .profile-dropdown {
+    background-color: white;
+    border: 1px solid base.$gray;
+
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    right: 20px;
+    top: 57px;
+
+    div.header {
+      cursor: default;
+
+      background-color: base.$blue;
+      display: flex;
+      justify-content: center;
+
+      border-bottom: 1px solid base.$gray;
+
+      padding: 0 40px;
+      margin-bottom: 6px;
+
+      p {
+        color: white;
+        font-family: "Amatic SC", cursive;
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+
+    p.about {
+      cursor: pointer;
+
+      font-size: 13px;
+
+      margin-left: 8px;
+      margin-bottom: 4px;
+
+      i {
+        margin-right: 5px;
+      }
+    }
+
+    p.logout {
+      cursor: pointer;
+
+      font-size: 13px;
+
+      border-top: 1px solid base.$gray;
+
+      padding: 9px 0;
+      margin: 0 8px;
+
+      i {
+        margin-right: 5px;
+      }
+    }
+
+    p:hover {
+      i {
+        color: base.$green;
+      }
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+}

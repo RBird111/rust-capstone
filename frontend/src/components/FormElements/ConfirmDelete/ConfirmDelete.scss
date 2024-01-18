@@ -1,0 +1,63 @@
+@use "../../../base.scss" as base;
+
+div.confirm-delete {
+  height: 15vw;
+  width: 20vw;
+
+  min-height: 225px;
+  min-width: 300px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .confirm {
+    cursor: default;
+
+    height: 90%;
+    width: 90%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    color: black;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+
+    .sure {
+      font-family: "Amatic SC", cursive;
+      font-size: 40px;
+      color: base.$red;
+      font-weight: bold;
+      // margin-bottom: 20px;
+    }
+
+    .btns {
+      display: flex;
+
+      button {
+        width: 110px;
+        margin: 0;
+        border-radius: 2px;
+      }
+
+      .yes {
+        button {
+          margin-right: 8px;
+        }
+      }
+
+      .no {
+        button {
+          margin-left: 8px;
+          background-color: white;
+          color: black;
+          border: 1px solid base.$gray;
+        }
+      }
+    }
+  }
+}

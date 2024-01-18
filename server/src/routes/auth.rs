@@ -1,5 +1,5 @@
 use actix_web::error::ErrorNotFound;
-use actix_web::{post, web, HttpResponse, Responder, Result};
+use actix_web::{get, post, web, HttpResponse, Responder, Result};
 use database::actions::user;
 use database::models::user::{UserForm, UserLogin};
 use serde_json::Value;
@@ -8,9 +8,22 @@ use crate::DBPool;
 
 pub fn auth_routes() -> actix_web::Scope {
     actix_web::web::scope("/auth")
+        .service(authenticate)
         .service(login)
         .service(signup)
         .service(logout)
+}
+
+#[get("")]
+async fn authenticate(state: DBPool) -> Result<impl Responder> {
+    let user = web::block(move || {
+        let mut conn = state.get().expect("error connecting to database");
+        user::get_user_by_id(&mut conn, 1)
+    })
+    .await?
+    .map_err(ErrorNotFound)?;
+
+    Ok(HttpResponse::Ok().json(user))
 }
 
 #[post("/login")]

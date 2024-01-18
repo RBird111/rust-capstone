@@ -1,0 +1,54 @@
+@use "../../../base.scss" as base;
+
+@keyframes spin {
+  0% {
+    transform: rotate(0turn);
+  }
+
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+.loading-div {
+  width: 100%;
+  height: 85vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    position: absolute;
+    top: 40vh;
+
+    color: base.$red;
+    font-family: "Amatic SC", cursive;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .loading-icon {
+    width: 70px;
+    height: 70px;
+    border: 10px solid base.$red;
+    border-radius: 50%;
+    animation: spin 1.9s linear infinite;
+
+    .inner-loading-icon {
+      width: 35px;
+      height: 35px;
+      border: 8px solid base.$blue;
+      border-radius: 50%;
+      animation: spin 1.9s linear infinite;
+
+      .inner-inner-loading-icon {
+        width: 17px;
+        height: 17px;
+        border: 4px solid base.$orange;
+        border-radius: 50%;
+      }
+    }
+  }
+}

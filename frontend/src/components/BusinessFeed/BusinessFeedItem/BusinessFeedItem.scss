@@ -1,0 +1,59 @@
+@use "../../../base.scss" as base;
+
+.b-feed-item:hover {
+  box-shadow: 0 0 10px base.$gray;
+
+  .name {
+    font-weight: bold;
+  }
+}
+
+.b-feed-item {
+  cursor: pointer;
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 8px;
+  border: 2px solid base.$gray;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .name-rating {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+
+    .name {
+      color: base.$green;
+      font-family: "Amatic SC", cursive;
+      font-size: 40px;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+
+      p {
+        margin-left: 7px;
+      }
+    }
+  }
+
+  .description {
+    width: 50%;
+
+    margin-right: 15px;
+
+    .d-title {
+      font-weight: bold;
+    }
+
+    .d-message {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+}

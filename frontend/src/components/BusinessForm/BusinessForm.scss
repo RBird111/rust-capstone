@@ -1,0 +1,75 @@
+@import "../../base.scss";
+
+div.business-form {
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .delete {
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 20px;
+    right: 20px;
+  }
+
+  .delete:hover {
+    i {
+      color: $red;
+    }
+
+    .confirm {
+      visibility: visible;
+    }
+  }
+
+  h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 500px;
+
+    .d-error {
+      width: 70%;
+    }
+
+    textarea {
+      box-sizing: border-box;
+
+      resize: none;
+
+      border-radius: 4px;
+      border: none;
+      outline: 1px solid $gray;
+
+      padding: 10px;
+      margin-bottom: 15px;
+      width: 70%;
+      height: 100px;
+    }
+
+    textarea:focus {
+      outline: 2px solid $blue;
+      border: none;
+    }
+
+    button {
+      width: 70%;
+    }
+  }
+}

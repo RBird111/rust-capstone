@@ -1,4 +1,10 @@
-use crate::schema::users;
+use super::business::Business;
+use super::image::Image;
+use super::location::Location;
+use super::review::Review;
+use super::users_locations::UserLocation;
+
+use crate::schema::{locations, users};
 
 use diesel::prelude::*;
 use password_auth::generate_hash;
@@ -26,6 +32,44 @@ pub struct User {
     pub email: String,
     #[serde(skip)]
     pub hashed_password: String,
+}
+
+impl User {
+    pub fn eager_load(&self, conn: &mut PgConnection) -> QueryResult<Value> {
+        Ok(serde_json::json!({
+            "user": self.get_result(conn)?
+        }))
+    }
+
+    pub fn get_result(&self, conn: &mut PgConnection) -> QueryResult<Value> {
+        let locations = UserLocation::belonging_to(self)
+            .inner_join(locations::table)
+            .select(Location::as_select())
+            .load(conn)?;
+
+        let reviews = Review::belonging_to(self)
+            .select(Review::as_select())
+            .load(conn)?;
+
+        let images = Image::belonging_to(self)
+            .select(Image::as_select())
+            .load(conn)?;
+
+        let owned_business = Business::belonging_to(self)
+            .select(Business::as_select())
+            .load(conn)?;
+
+        let result = serde_json::to_value(UserFull {
+            user: self.clone(),
+            locations,
+            reviews,
+            images,
+            owned_business,
+        })
+        .unwrap();
+
+        Ok(result)
+    }
 }
 
 #[derive(Insertable, AsChangeset, Debug)]
@@ -63,4 +107,36 @@ impl UserForm {
 pub struct UserLogin {
     pub credential: String,
     pub password: String,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct UserFull {
+    #[serde(flatten)]
+    pub user: User,
+    pub locations: Vec<Location>,
+    pub reviews: Vec<Review>,
+    pub images: Vec<Image>,
+    pub owned_business: Vec<Business>,
+}
+
+#[derive(Debug, Clone)]
+pub struct UserArray(Vec<User>);
+
+impl UserArray {
+    pub fn new(users: Vec<User>) -> Self {
+        Self(users)
+    }
+
+    pub fn eager_load(&self, conn: &mut PgConnection) -> QueryResult<Value> {
+        let result: Vec<Value> = self
+            .0
+            .clone()
+            .into_iter()
+            .filter_map(|r| r.get_result(conn).ok())
+            .collect();
+
+        Ok(serde_json::json!({
+            "users": result
+        }))
+    }
 }

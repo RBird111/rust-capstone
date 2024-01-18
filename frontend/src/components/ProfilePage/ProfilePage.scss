@@ -1,0 +1,54 @@
+@import "../../base.scss";
+
+div.profile-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 89.4vh;
+  padding: 10px;
+
+  .acc-imgs {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 100%;
+
+    h1 {
+      margin-bottom: 10px;
+    }
+  }
+
+  .account {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+
+    h1 {
+      margin-bottom: 10px;
+    }
+  }
+
+  .imgs {
+    width: 400px;
+    height: 310px;
+  }
+
+  .personal-reviews {
+    width: 90%;
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .user-review-items {
+      height: 430px;
+      overflow-y: scroll;
+      outline: 2px solid $orange;
+      border-radius: 5px;
+      box-shadow: inset 0 0 5px $gray;
+      padding: 20px;
+    }
+  }
+}

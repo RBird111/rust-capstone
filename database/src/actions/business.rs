@@ -7,28 +7,33 @@ use diesel::prelude::*;
 use diesel::PgConnection;
 use serde_json::Value;
 
-pub fn get_all_businesses(conn: &mut PgConnection) -> DataResult<Vec<Business>> {
-    Ok(businesses.select(Business::as_select()).load(conn)?)
+pub fn get_all_businesses(conn: &mut PgConnection) -> DataResult<Value> {
+    let business_array: Vec<Business> = businesses.select(Business::as_select()).load(conn)?;
+    Ok(BusinessArray::new(business_array).eager_load(conn)?)
 }
 
-pub fn create_new_business(conn: &mut PgConnection, data: BusinessForm) -> DataResult<Business> {
+pub fn create_new_business(conn: &mut PgConnection, data: BusinessForm) -> DataResult<Value> {
     let BusinessForm { business, location } = data;
     let location = match get_location_by_address(conn, &location.address) {
         Err(_) => create_new_location(conn, location)?,
         Ok(l) => l,
     };
 
-    Ok(diesel::insert_into(businesses)
+    let new_business: Business = diesel::insert_into(businesses)
         .values(BusinessInsertable::new(business, location.id))
-        .get_result(conn)?)
+        .get_result(conn)?;
+
+    Ok(new_business.eager_load(conn)?)
 }
 
-pub fn get_business_by_id(conn: &mut PgConnection, business_id: i32) -> DataResult<Business> {
-    Ok(businesses.find(business_id).first(conn)?)
+pub fn get_business_by_id(conn: &mut PgConnection, business_id: i32) -> DataResult<Value> {
+    let business: Business = businesses.find(business_id).first(conn)?;
+    Ok(business.eager_load(conn)?)
 }
 
-pub fn update_business(conn: &mut PgConnection, business: Business) -> DataResult<Business> {
-    Ok(diesel::update(businesses).set(business).get_result(conn)?)
+pub fn update_business(conn: &mut PgConnection, business: Business) -> DataResult<Value> {
+    let updated_business: Business = diesel::update(businesses).set(business).get_result(conn)?;
+    Ok(updated_business.eager_load(conn)?)
 }
 
 pub fn delete_business(conn: &mut PgConnection, business_id: i32) -> Value {

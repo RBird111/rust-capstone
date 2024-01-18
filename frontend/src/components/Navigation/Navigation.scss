@@ -1,0 +1,63 @@
+@use "../../base.scss" as base;
+
+.nav-bar-div {
+  z-index: 1;
+
+  position: sticky;
+  top: 0;
+  width: 100%;
+
+  background-color: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-bottom: 1px solid base.$gray;
+  padding: 8px 0;
+
+  a.nav-logo {
+    padding-left: 20px;
+
+    text-decoration: none;
+  }
+
+  .profile-div {
+    display: flex;
+    align-items: center;
+
+    .add-business {
+      cursor: pointer;
+      margin-right: 25px;
+      font-size: 13px;
+    }
+
+    .add-business:hover {
+      color: base.$blue;
+      font-weight: bold;
+    }
+  }
+
+  .logged-out {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding-right: 20px;
+
+    p {
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 13px;
+    }
+
+    p:hover {
+      color: base.$blue;
+      font-weight: bold;
+    }
+
+    button {
+      margin: 0 10px;
+    }
+  }
+}

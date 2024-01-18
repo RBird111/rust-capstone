@@ -1,0 +1,43 @@
+@use "../../base.scss" as base;
+
+div.login-form {
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+
+    span {
+      color: base.$red;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 500px;
+
+    button {
+      width: 70%;
+      margin-bottom: 20px;
+    }
+  }
+
+  .demo-user {
+    cursor: pointer;
+    color: base.$blue;
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  .demo-user:hover {
+    font-weight: bold;
+  }
+}

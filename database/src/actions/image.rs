@@ -7,22 +7,29 @@ use diesel::prelude::*;
 use diesel::PgConnection;
 use serde_json::Value;
 
-pub fn get_all_images(conn: &mut PgConnection) -> DataResult<Vec<Image>> {
-    Ok(images.select(Image::as_select()).load(conn)?)
+pub fn get_all_images(conn: &mut PgConnection) -> DataResult<Value> {
+    let image_data: ImageArray = ImageArray::new(images.select(Image::as_select()).load(conn)?);
+    Ok(image_data.eager_load(conn)?)
 }
 
-pub fn get_image_by_id(conn: &mut PgConnection, image_id: i32) -> DataResult<Image> {
-    Ok(images.find(image_id).first(conn)?)
+pub fn get_image_by_id(conn: &mut PgConnection, image_id: i32) -> DataResult<Value> {
+    let image: Image = images.find(image_id).first(conn)?;
+    Ok(image.eager_load(conn)?)
 }
 
-pub fn get_user_images(conn: &mut PgConnection, curr_user: User) -> DataResult<Vec<Image>> {
-    Ok(Image::belonging_to(&curr_user)
-        .select(Image::as_select())
-        .load(conn)?)
+pub fn get_user_images(conn: &mut PgConnection, curr_user: User) -> DataResult<Value> {
+    let image_data: ImageArray = ImageArray::new(
+        Image::belonging_to(&curr_user)
+            .select(Image::as_select())
+            .load(conn)?,
+    );
+
+    Ok(image_data.eager_load(conn)?)
 }
 
-pub fn upload_image(conn: &mut PgConnection, image: ImageForm) -> DataResult<Image> {
-    Ok(diesel::insert_into(images).values(image).get_result(conn)?)
+pub fn upload_image(conn: &mut PgConnection, image: ImageForm) -> DataResult<Value> {
+    let new_image: Image = diesel::insert_into(images).values(image).get_result(conn)?;
+    Ok(new_image.eager_load(conn)?)
 }
 
 pub fn delete_image(conn: &mut PgConnection, image_id: i32) -> Value {
