@@ -23,7 +23,7 @@ const Footer = () => {
         <a
           target="_blank"
           rel="noreferrer"
-          href="https://github.com/MrBird88/capstone-yelp-clone"
+          href="https://github.com/RBird111/rust-capstone"
         >
           <i className="fa-brands fa-python fa-lg" />
           <i className="fa-brands fa-css3 fa-lg" />
