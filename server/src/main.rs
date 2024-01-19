@@ -82,7 +82,7 @@ async fn main() -> std::io::Result<()> {
             .service(routes::api_routes())
             .service(default())
     })
-    .bind(("localhost", port))?
+    .bind(("127.0.0.1", port))?
     .run()
     .await
 }
