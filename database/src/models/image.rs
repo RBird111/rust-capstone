@@ -84,6 +84,7 @@ pub struct ImageForm {
 
 #[derive(Debug, Serialize, Clone)]
 pub struct ImageFull {
+    #[serde(flatten)]
     pub image: Image,
     pub user: User,
     pub business: Option<Business>,

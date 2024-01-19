@@ -31,7 +31,9 @@ pub fn create_new_location(
 }
 
 pub fn update_location(conn: &mut PgConnection, location: Location) -> DataResult<Location> {
-    Ok(diesel::update(locations).set(location).get_result(conn)?)
+    Ok(diesel::update(locations.filter(id.eq(location.id)))
+        .set(location)
+        .get_result(conn)?)
 }
 
 pub fn delete_location(conn: &mut PgConnection, location_id: i32) -> Value {

@@ -1,10 +1,12 @@
+use super::get_authenticated_user;
+use crate::DBPool;
+
+use actix_session::Session;
 use actix_web::error::ErrorNotFound;
 use actix_web::{get, post, web, HttpResponse, Responder, Result};
 use database::actions::user;
 use database::models::user::{UserForm, UserLogin};
-use serde_json::Value;
-
-use crate::DBPool;
+use serde_json::{json, Value};
 
 pub fn auth_routes() -> actix_web::Scope {
     actix_web::web::scope("/auth")
@@ -15,19 +17,21 @@ pub fn auth_routes() -> actix_web::Scope {
 }
 
 #[get("")]
-async fn authenticate(state: DBPool) -> Result<impl Responder> {
-    let user = web::block(move || {
-        let mut conn = state.get().expect("error connecting to database");
-        user::get_user_by_id(&mut conn, 1)
-    })
-    .await?
-    .map_err(ErrorNotFound)?;
+async fn authenticate(session: Session, state: DBPool) -> Result<impl Responder> {
+    let user = match get_authenticated_user(&session, state.clone()).await {
+        Some(u) => u,
+        None => return Ok(HttpResponse::Ok().json(json!({"errors": ["Unauthorized"]}))),
+    };
 
     Ok(HttpResponse::Ok().json(user))
 }
 
 #[post("/login")]
-async fn login(state: DBPool, data: web::Json<UserLogin>) -> Result<impl Responder> {
+async fn login(
+    session: Session,
+    state: DBPool,
+    data: web::Json<UserLogin>,
+) -> Result<impl Responder> {
     let user_data = data.into_inner();
 
     let user = web::block(move || {
@@ -37,11 +41,14 @@ async fn login(state: DBPool, data: web::Json<UserLogin>) -> Result<impl Respond
     .await?
     .map_err(ErrorNotFound)?;
 
+    session.insert("user_id", user.id)?;
+    session.renew();
+
     Ok(HttpResponse::Ok().json(user))
 }
 
 #[post("/signup")]
-async fn signup(state: DBPool, data: web::Json<Value>) -> Result<impl Responder> {
+async fn signup(session: Session, state: DBPool, data: web::Json<Value>) -> Result<impl Responder> {
     let user_data = UserForm::from_json(data.into_inner());
 
     let user = web::block(move || {
@@ -51,13 +58,16 @@ async fn signup(state: DBPool, data: web::Json<Value>) -> Result<impl Responder>
     .await?
     .map_err(ErrorNotFound)?;
 
+    session.insert("user_id", user.id)?;
+    session.renew();
+
     Ok(HttpResponse::Created().json(user))
 }
 
-#[post("/logout")]
-async fn logout(_state: DBPool) -> Result<impl Responder> {
-    // TODO: Deal with logout
-    // let success: &str = r#"{"message": "User logged out"}"#;
-    // let error: &str = r#"{"message": "Unable to locate user"}"#;
-    Ok(HttpResponse::Ok())
+#[get("/logout")]
+async fn logout(session: Session, _state: DBPool) -> Result<impl Responder> {
+    session.purge();
+    Ok(HttpResponse::SeeOther()
+        .append_header(("Location", "/"))
+        .body("User logged out."))
 }

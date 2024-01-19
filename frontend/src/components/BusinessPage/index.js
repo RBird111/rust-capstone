@@ -1,9 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import {
-  useHistory,
-  useParams,
-} from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import "./BusinessPage.scss";
 import { useModal } from "../../context/Modal";
@@ -76,8 +73,7 @@ const BusinessPage = () => {
       city: business.location.city,
     };
 
-    const data = await dispatch(updateBusiness(businessData));
-    console.log("DATA =>", data);
+    await dispatch(updateBusiness(businessData));
     await dispatch(getBusiness(business.id));
   };
 

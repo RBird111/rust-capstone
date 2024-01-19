@@ -7,8 +7,18 @@ use diesel::prelude::*;
 use diesel::PgConnection;
 use serde_json::Value;
 
-pub fn get_all_businesses(conn: &mut PgConnection) -> DataResult<Value> {
-    let business_array: Vec<Business> = businesses.select(Business::as_select()).load(conn)?;
+pub fn get_all_businesses(
+    conn: &mut PgConnection,
+    category_filter: Option<String>,
+) -> DataResult<Value> {
+    let business_array: Vec<Business> = match category_filter {
+        None => businesses.select(Business::as_select()).load(conn)?,
+        Some(cat) => businesses
+            .select(Business::as_select())
+            .filter(category.eq(cat))
+            .load(conn)?,
+    };
+    // let business_array: Vec<Business> = businesses.select(Business::as_select()).load(conn)?;
     Ok(BusinessArray::new(business_array).eager_load(conn)?)
 }
 
@@ -32,7 +42,9 @@ pub fn get_business_by_id(conn: &mut PgConnection, business_id: i32) -> DataResu
 }
 
 pub fn update_business(conn: &mut PgConnection, business: Business) -> DataResult<Value> {
-    let updated_business: Business = diesel::update(businesses).set(business).get_result(conn)?;
+    let updated_business: Business = diesel::update(businesses.filter(id.eq(business.id)))
+        .set(business)
+        .get_result(conn)?;
     Ok(updated_business.eager_load(conn)?)
 }
 
