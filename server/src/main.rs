@@ -66,6 +66,11 @@ async fn main() -> std::io::Result<()> {
         .parse()
         .expect("PORT must be an integer");
 
+    let host = match std::env::var("RUST_ENV") {
+        Ok(_) => "127.0.0.1",
+        Err(_) => "0.0.0.0",
+    };
+
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     let pool = database::get_pool();
@@ -82,7 +87,7 @@ async fn main() -> std::io::Result<()> {
             .service(routes::api_routes())
             .service(default())
     })
-    .bind(("0.0.0.0", port))?
+    .bind((host, port))?
     .run()
     .await
 }
