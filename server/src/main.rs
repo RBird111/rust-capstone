@@ -62,7 +62,7 @@ async fn main() -> std::io::Result<()> {
     dotenvy::dotenv().expect(".env not found");
 
     let port: u16 = std::env::var("PORT")
-        .expect("PORT must be set")
+        .unwrap_or("8080".to_string())
         .parse()
         .expect("PORT must be an integer");
 
