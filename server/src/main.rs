@@ -67,7 +67,11 @@ async fn main() -> std::io::Result<()> {
         .expect("PORT must be an integer");
 
     let host = match std::env::var("RUST_ENV") {
-        Ok(_) => "127.0.0.1",
+        Ok(val) => match val.as_str() {
+            "production" => "0.0.0.0",
+            "development" => "127.0.1",
+            _ => unreachable!(),
+        },
         Err(_) => "0.0.0.0",
     };
 
