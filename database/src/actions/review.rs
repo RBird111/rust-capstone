@@ -32,7 +32,18 @@ pub fn get_random_reviews(conn: &mut PgConnection, num: usize) -> DataResult<Val
     Ok(ReviewArray::new(rand_reviews).eager_load(conn)?)
 }
 
-pub fn create_new_review(conn: &mut PgConnection, review: ReviewForm) -> DataResult<Value> {
+pub fn create_new_review(
+    conn: &mut PgConnection,
+    form_data: Value,
+    user: User,
+) -> DataResult<Value> {
+    let review = ReviewForm {
+        rating: form_data["rating"].as_i64().unwrap() as i32,
+        body: form_data["body"].as_str().unwrap().to_string(),
+        user_id: user.id,
+        business_id: form_data["business_id"].as_i64().unwrap() as i32,
+    };
+
     let new_review: Review = diesel::insert_into(reviews)
         .values(review)
         .get_result(conn)?;
@@ -41,7 +52,9 @@ pub fn create_new_review(conn: &mut PgConnection, review: ReviewForm) -> DataRes
 }
 
 pub fn update_review(conn: &mut PgConnection, review: Review) -> DataResult<Value> {
-    let updated_review: Review = diesel::update(reviews).set(review).get_result(conn)?;
+    let updated_review: Review = diesel::update(reviews.filter(id.eq(review.id)))
+        .set(review)
+        .get_result(conn)?;
 
     Ok(updated_review.eager_load(conn)?)
 }

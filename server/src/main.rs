@@ -1,26 +1,57 @@
 pub mod routes;
 
-use actix_files as fs;
-use actix_web::{dev, middleware, web, App, HttpResponse, HttpServer, Responder};
+use actix_files::{Files, NamedFile};
+use actix_session::config::{BrowserSession, CookieContentSecurity};
+use actix_session::storage::CookieSessionStore;
+use actix_session::{Session, SessionMiddleware};
+use actix_web::cookie::{Key, SameSite};
+use actix_web::{dev, get, middleware, post, web, App, HttpResponse, HttpServer, Responder};
 use database::ConnectionPool;
 
 pub type DBPool = web::Data<ConnectionPool>;
 
-#[actix_web::get("/")]
-async fn home() -> impl Responder {
-    let index = include_str!("../../frontend/build/index.html");
-    HttpResponse::Ok().body(index)
+#[derive(Debug, serde::Deserialize)]
+struct CookieModel {
+    message: String,
 }
 
-fn default() -> fs::Files {
-    fs::Files::new("/", "./frontend/build")
+#[get("get_session")]
+async fn get_session(session: Session) -> impl Responder {
+    match session.get::<String>("message") {
+        Ok(message_option) => match message_option {
+            Some(message) => HttpResponse::Ok().body(message),
+            None => HttpResponse::NotFound().body("Not set."),
+        },
+        Err(_) => HttpResponse::InternalServerError().body("Session error."),
+    }
+}
+
+#[post("set_session")]
+async fn set_session(session: Session, model: web::Json<CookieModel>) -> impl Responder {
+    match session.insert("message", model.message.clone()) {
+        Ok(_) => HttpResponse::Created().body("Created."),
+        Err(_) => HttpResponse::InternalServerError().body("Error."),
+    }
+}
+
+fn session_middleware() -> SessionMiddleware<CookieSessionStore> {
+    SessionMiddleware::builder(CookieSessionStore::default(), Key::from(&[0; 64]))
+        .cookie_name("test-cookie".to_string())
+        .session_lifecycle(BrowserSession::default())
+        .cookie_same_site(SameSite::Strict)
+        .cookie_content_security(CookieContentSecurity::Private)
+        .cookie_http_only(true)
+        .build()
+}
+
+fn default() -> Files {
+    Files::new("/", "./frontend/build")
         .index_file("index.html")
         .default_handler(|req: dev::ServiceRequest| {
             let (http_req, _payload) = req.into_parts();
-
             async {
                 let response =
-                    fs::NamedFile::open("./frontend/build/index.html")?.into_response(&http_req);
+                    NamedFile::open("./frontend/build/index.html")?.into_response(&http_req);
                 Ok(dev::ServiceResponse::new(http_req, response))
             }
         })
@@ -44,8 +75,10 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .wrap(middleware::Logger::new("%r %s"))
+            .wrap(session_middleware())
             .app_data(web::Data::new(pool.clone()))
-            .service(home)
+            .service(get_session)
+            .service(set_session)
             .service(routes::api_routes())
             .service(default())
     })

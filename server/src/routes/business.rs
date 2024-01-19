@@ -2,6 +2,7 @@ use actix_web::error::ErrorNotFound;
 use actix_web::{delete, get, post, put, web, HttpResponse, Responder, Result};
 use database::actions::business;
 use database::models::business::*;
+use serde_json::Value;
 
 use crate::DBPool;
 
@@ -15,10 +16,16 @@ pub fn business_routes() -> actix_web::Scope {
 }
 
 #[get("")]
-async fn get_all_businesses(state: DBPool) -> Result<impl Responder> {
+async fn get_all_businesses(state: DBPool, query: web::Query<Value>) -> Result<impl Responder> {
+    let category = query.into_inner().get("category").map(|v| {
+        v.as_str()
+            .expect("error parsing query parameter")
+            .to_string()
+    });
+
     let businesses = web::block(move || {
         let mut conn = state.get().expect("error connecting to database");
-        business::get_all_businesses(&mut conn)
+        business::get_all_businesses(&mut conn, category)
     })
     .await?
     .map_err(ErrorNotFound)?;

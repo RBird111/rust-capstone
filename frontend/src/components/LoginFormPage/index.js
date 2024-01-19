@@ -58,7 +58,7 @@ function LoginFormPage() {
 
   const loginDemo = async (e) => {
     e.preventDefault();
-    await dispatch(login({ credential: "demo-lition", password: "password" }));
+    await dispatch(login({ credential: "demolition", password: "password" }));
     closeModal();
   };
 
