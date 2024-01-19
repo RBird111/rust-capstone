@@ -59,7 +59,7 @@ fn default() -> Files {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    dotenvy::dotenv().expect(".env not found");
+    let _ = dotenvy::dotenv();
 
     let port: u16 = std::env::var("PORT")
         .unwrap_or("8080".to_string())
@@ -82,7 +82,7 @@ async fn main() -> std::io::Result<()> {
             .service(routes::api_routes())
             .service(default())
     })
-    .bind(("127.0.0.1", port))?
+    .bind(("0.0.0.0", port))?
     .run()
     .await
 }
