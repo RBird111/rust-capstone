@@ -2,7 +2,6 @@ use std::fs;
 
 use database::{models, schema};
 use diesel::prelude::*;
-use diesel::PgConnection;
 use rand::seq::IteratorRandom;
 use serde_json::{from_str, Value};
 
