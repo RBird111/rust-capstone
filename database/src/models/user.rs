@@ -1,15 +1,14 @@
+use diesel::prelude::*;
+use password_auth::generate_hash;
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
+
 use super::business::Business;
 use super::image::Image;
 use super::location::Location;
 use super::review::Review;
 use super::users_locations::UserLocation;
-
 use crate::schema::{locations, users};
-
-use diesel::prelude::*;
-use password_auth::generate_hash;
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 #[derive(
     AsChangeset,
@@ -25,11 +24,11 @@ use serde_json::Value;
 #[diesel(table_name = users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct User {
-    pub id: i32,
-    pub first_name: String,
-    pub last_name: String,
-    pub username: String,
-    pub email: String,
+    pub id:              i32,
+    pub first_name:      String,
+    pub last_name:       String,
+    pub username:        String,
+    pub email:           String,
     #[serde(skip)]
     pub hashed_password: String,
 }
@@ -75,10 +74,10 @@ impl User {
 #[derive(Insertable, AsChangeset, Debug)]
 #[diesel(table_name = users)]
 pub struct UserForm {
-    pub first_name: String,
-    pub last_name: String,
-    pub username: String,
-    pub email: String,
+    pub first_name:      String,
+    pub last_name:       String,
+    pub username:        String,
+    pub email:           String,
     pub hashed_password: String,
 }
 
@@ -94,10 +93,10 @@ impl UserForm {
         let password = extract_data("password");
 
         Self {
-            first_name: extract_data("first_name"),
-            last_name: extract_data("last_name"),
-            username: extract_data("username"),
-            email: extract_data("email"),
+            first_name:      extract_data("first_name"),
+            last_name:       extract_data("last_name"),
+            username:        extract_data("username"),
+            email:           extract_data("email"),
             hashed_password: generate_hash(password),
         }
     }
@@ -106,16 +105,16 @@ impl UserForm {
 #[derive(Debug, Clone, Deserialize)]
 pub struct UserLogin {
     pub credential: String,
-    pub password: String,
+    pub password:   String,
 }
 
 #[derive(Debug, Clone, Serialize)]
 pub struct UserFull {
     #[serde(flatten)]
-    pub user: User,
-    pub locations: Vec<Location>,
-    pub reviews: Vec<Review>,
-    pub images: Vec<Image>,
+    pub user:           User,
+    pub locations:      Vec<Location>,
+    pub reviews:        Vec<Review>,
+    pub images:         Vec<Image>,
     pub owned_business: Vec<Business>,
 }
 

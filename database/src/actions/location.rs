@@ -1,10 +1,9 @@
+use diesel::prelude::*;
+use serde_json::Value;
+
 use super::DataResult;
 use crate::models::location::{Location, LocationForm};
 use crate::schema::locations::dsl::*;
-
-use diesel::prelude::*;
-use diesel::PgConnection;
-use serde_json::Value;
 
 pub fn get_all_locations(conn: &mut PgConnection) -> DataResult<Vec<Location>> {
     Ok(locations.select(Location::as_select()).load(conn)?)

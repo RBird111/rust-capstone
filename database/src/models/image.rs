@@ -1,11 +1,11 @@
-use crate::models::review::Review;
-use crate::models::user::User;
-use crate::schema::{businesses, images, reviews};
-use crate::{models::business::Business, schema::users};
-
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+
+use crate::models::business::Business;
+use crate::models::review::Review;
+use crate::models::user::User;
+use crate::schema::{businesses, images, reviews, users};
 
 #[derive(
     Associations,
@@ -24,11 +24,11 @@ use serde_json::Value;
 #[diesel(table_name = images)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Image {
-    pub id: i32,
-    pub url: String,
-    pub user_id: i32,
+    pub id:          i32,
+    pub url:         String,
+    pub user_id:     i32,
     pub business_id: Option<i32>,
-    pub review_id: Option<i32>,
+    pub review_id:   Option<i32>,
 }
 
 impl Image {
@@ -76,19 +76,19 @@ impl Image {
 #[derive(Debug, Deserialize, Insertable)]
 #[diesel(table_name = images)]
 pub struct ImageForm {
-    pub url: String,
-    pub user_id: i32,
+    pub url:         String,
+    pub user_id:     i32,
     pub business_id: Option<i32>,
-    pub review_id: Option<i32>,
+    pub review_id:   Option<i32>,
 }
 
 #[derive(Debug, Serialize, Clone)]
 pub struct ImageFull {
     #[serde(flatten)]
-    pub image: Image,
-    pub user: User,
+    pub image:    Image,
+    pub user:     User,
     pub business: Option<Business>,
-    pub review: Option<Review>,
+    pub review:   Option<Review>,
 }
 
 pub struct ImageArray(Vec<Image>);

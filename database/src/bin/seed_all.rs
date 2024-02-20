@@ -140,7 +140,7 @@ fn seed_users_locations(conn: &mut PgConnection) {
         .choose_multiple(&mut rng, 50)
         .into_iter()
         .map(|(u, l)| UserLocation {
-            user_id: u,
+            user_id:     u,
             location_id: l,
         })
         .collect();
@@ -190,10 +190,10 @@ fn seed_images(conn: &mut PgConnection) {
         .map(extract_url)
         .zip(0..)
         .map(|(url_, idx)| ImageForm {
-            url: url_,
-            user_id: (idx % 50) + 1,
+            url:         url_,
+            user_id:     (idx % 50) + 1,
             business_id: Some((idx % 30) + 1),
-            review_id: Some(idx + 1),
+            review_id:   Some(idx + 1),
         })
         .collect();
 

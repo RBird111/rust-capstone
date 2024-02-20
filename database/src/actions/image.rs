@@ -1,11 +1,10 @@
+use diesel::prelude::*;
+use serde_json::Value;
+
 use super::DataResult;
 use crate::models::image::*;
 use crate::models::user::User;
 use crate::schema::images::dsl::*;
-
-use diesel::prelude::*;
-use diesel::PgConnection;
-use serde_json::Value;
 
 pub fn get_all_images(conn: &mut PgConnection) -> DataResult<Value> {
     let image_data: ImageArray = ImageArray::new(images.select(Image::as_select()).load(conn)?);

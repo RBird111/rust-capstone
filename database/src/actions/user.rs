@@ -1,11 +1,10 @@
+use diesel::prelude::*;
+use password_auth::verify_password;
+use serde_json::Value;
+
 use super::DataResult;
 use crate::models::user::*;
 use crate::schema::users::dsl::*;
-
-use diesel::prelude::*;
-use diesel::PgConnection;
-use password_auth::verify_password;
-use serde_json::Value;
 
 pub fn get_all_users(conn: &mut PgConnection) -> DataResult<Value> {
     let all_users: Vec<User> = users.select(User::as_select()).load(conn)?;

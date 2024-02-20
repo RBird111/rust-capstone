@@ -1,11 +1,11 @@
-use super::get_authenticated_user;
-use crate::DBPool;
-
 use actix_session::Session;
 use actix_web::error::ErrorNotFound;
 use actix_web::{delete, get, post, web, HttpResponse, Responder, Result};
 use database::actions::image;
 use database::models::image::*;
+
+use super::get_authenticated_user;
+use crate::DBPool;
 
 pub fn image_routes() -> actix_web::Scope {
     web::scope("/images")

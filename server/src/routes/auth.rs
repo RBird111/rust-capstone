@@ -1,12 +1,12 @@
-use super::get_authenticated_user;
-use crate::DBPool;
-
 use actix_session::Session;
 use actix_web::error::ErrorNotFound;
 use actix_web::{get, post, web, HttpResponse, Responder, Result};
 use database::actions::user;
 use database::models::user::{UserForm, UserLogin};
 use serde_json::{json, Value};
+
+use super::get_authenticated_user;
+use crate::DBPool;
 
 pub fn auth_routes() -> actix_web::Scope {
     actix_web::web::scope("/auth")

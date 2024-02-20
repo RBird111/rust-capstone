@@ -1,11 +1,10 @@
+use diesel::prelude::*;
+use serde_json::Value;
+
 use super::DataResult;
 use crate::actions::location::{create_new_location, get_location_by_address};
 use crate::models::business::*;
 use crate::schema::businesses::dsl::*;
-
-use diesel::prelude::*;
-use diesel::PgConnection;
-use serde_json::Value;
 
 pub fn get_all_businesses(
     conn: &mut PgConnection,

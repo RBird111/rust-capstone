@@ -1,12 +1,11 @@
-use super::business::Business;
-use super::image::Image;
-use super::user::User;
-
-use crate::schema::{businesses, images, reviews, users};
-
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+
+use super::business::Business;
+use super::image::Image;
+use super::user::User;
+use crate::schema::{businesses, images, reviews, users};
 
 #[derive(
     Associations,
@@ -24,10 +23,10 @@ use serde_json::Value;
 #[diesel(table_name = reviews)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Review {
-    pub id: i32,
-    pub rating: i32,
-    pub body: String,
-    pub user_id: i32,
+    pub id:          i32,
+    pub rating:      i32,
+    pub body:        String,
+    pub user_id:     i32,
     pub business_id: i32,
 }
 
@@ -77,19 +76,19 @@ impl Review {
 #[derive(Debug, Deserialize, Insertable)]
 #[diesel(table_name = reviews)]
 pub struct ReviewForm {
-    pub rating: i32,
-    pub body: String,
-    pub user_id: i32,
+    pub rating:      i32,
+    pub body:        String,
+    pub user_id:     i32,
     pub business_id: i32,
 }
 
 #[derive(Debug, Clone, Serialize)]
 pub struct ReviewFull {
     #[serde(flatten)]
-    pub review: Review,
+    pub review:   Review,
     pub business: Business,
-    pub user: User,
-    pub images: Vec<Image>,
+    pub user:     User,
+    pub images:   Vec<Image>,
 }
 
 #[derive(Debug, Clone)]

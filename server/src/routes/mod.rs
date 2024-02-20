@@ -5,12 +5,12 @@ pub mod location;
 pub mod review;
 pub mod user;
 
-use crate::DBPool;
-
 use actix_session::Session;
 use actix_web::web;
 use database::actions::user as user_actions;
 use database::models::user::User;
+
+use crate::DBPool;
 
 pub fn api_routes() -> actix_web::Scope {
     actix_web::web::scope("/api")

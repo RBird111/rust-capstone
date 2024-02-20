@@ -1,12 +1,12 @@
-use super::get_authenticated_user;
-use crate::DBPool;
-
 use actix_session::Session;
 use actix_web::error::ErrorNotFound;
 use actix_web::{delete, get, post, put, web, HttpResponse, Responder, Result};
 use database::actions::review;
 use database::models::review::*;
 use serde_json::Value;
+
+use super::get_authenticated_user;
+use crate::DBPool;
 
 pub fn review_routes() -> actix_web::Scope {
     web::scope("/reviews")

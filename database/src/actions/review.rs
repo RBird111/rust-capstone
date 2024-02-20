@@ -1,12 +1,11 @@
+use diesel::prelude::*;
+use rand::seq::SliceRandom;
+use serde_json::Value;
+
 use super::DataResult;
 use crate::models::review::*;
 use crate::models::user::User;
 use crate::schema::reviews::dsl::*;
-
-use diesel::prelude::*;
-use diesel::PgConnection;
-use rand::seq::SliceRandom;
-use serde_json::Value;
 
 pub fn get_all_reviews(conn: &mut PgConnection) -> DataResult<Value> {
     let review_arr = ReviewArray::new(reviews.select(Review::as_select()).load(conn)?);
@@ -38,9 +37,9 @@ pub fn create_new_review(
     user: User,
 ) -> DataResult<Value> {
     let review = ReviewForm {
-        rating: form_data["rating"].as_i64().unwrap() as i32,
-        body: form_data["body"].as_str().unwrap().to_string(),
-        user_id: user.id,
+        rating:      form_data["rating"].as_i64().unwrap() as i32,
+        body:        form_data["body"].as_str().unwrap().to_string(),
+        user_id:     user.id,
         business_id: form_data["business_id"].as_i64().unwrap() as i32,
     };
 
