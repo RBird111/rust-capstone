@@ -1,11 +1,15 @@
 pub mod routes;
 
 use actix_files::{Files, NamedFile};
-use actix_session::config::{BrowserSession, CookieContentSecurity};
-use actix_session::storage::CookieSessionStore;
-use actix_session::SessionMiddleware;
-use actix_web::cookie::{Key, SameSite};
-use actix_web::{dev, middleware, web, App, HttpServer};
+use actix_session::{
+    config::{BrowserSession, CookieContentSecurity},
+    storage::CookieSessionStore,
+    SessionMiddleware,
+};
+use actix_web::{
+    cookie::{Key, SameSite},
+    dev, middleware, web, App, HttpServer,
+};
 use database::ConnectionPool;
 
 pub type DBPool = web::Data<ConnectionPool>;
@@ -38,7 +42,7 @@ async fn main() -> std::io::Result<()> {
     let _ = dotenvy::dotenv();
 
     let port: u16 = std::env::var("PORT")
-        .unwrap_or("8080".to_string())
+        .unwrap_or("4000".to_string())
         .parse()
         .expect("PORT must be an integer");
 
